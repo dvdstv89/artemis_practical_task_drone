@@ -1,5 +1,6 @@
 ﻿using drones.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace drones.API.Controllers
 {
@@ -13,6 +14,8 @@ namespace drones.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Registering a new drone")]
         public async Task<ActionResult<Drone>> RegisterNewDrone([FromBody] Drone drone)
         {
             if (!ModelState.IsValid)
