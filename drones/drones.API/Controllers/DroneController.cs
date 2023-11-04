@@ -1,4 +1,6 @@
 ﻿using drones.API.Models;
+using drones.API.Services;
+using drones.API.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -8,22 +10,23 @@ namespace drones.API.Controllers
     [ApiController]
     public class DroneController : BaseController<DroneController>
     {
-        public DroneController(ILogger<DroneController> logger) : base(logger)
+        private readonly IDroneService _service;
+        public DroneController(ILogger<DroneController> logger, IDroneService droneService) : base(logger)
         {
-
+            _service = droneService;
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Registering a new drone")]
-        public async Task<ActionResult<Drone>> RegisterNewDrone([FromBody] Drone drone)
+        public async Task<ActionResult<ApiResponse>> RegisterNewDrone([FromBody] Drone drone)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            return Ok(drone);
+            ApiResponse response = await _service.RegisterDroneAsync(drone);
+            return await ProcessResponse(response);
         }
     }
 }
