@@ -12,10 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Data\" />
     <Folder Include="DTO\" />
-    <Folder Include="Utils\" />
     <Folder Include="Repositories\" />
     <Folder Include="Services\" />
   </ItemGroup>
