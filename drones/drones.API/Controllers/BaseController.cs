@@ -27,7 +27,7 @@ namespace drones.API.Controllers
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                _logger.LogInformation(string.Format(MessageText.HANDLE_API_RESPONSE_NO_FOUND, endpoint));
+                _logger.LogInformation(string.Format(MessageText.HANDLE_API_RESPONSE_NOT_FOUND, endpoint));
                 return NotFound(response);
             }
             _logger.LogError(string.Format(MessageText.HANDLE_API_RESPONSE_BAD_RESPONSE, endpoint));

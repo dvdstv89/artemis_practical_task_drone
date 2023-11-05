@@ -11,6 +11,7 @@ namespace drones.API.Services
         Task<ApiResponse> RegisterDroneAsync(Drone drone);
         Task<ApiResponse> LoadMedicationsIntoDroneAsync(string serialNumber, List<DroneMedicationDto> medications);
         Task<ApiResponse> CheckLoadedMedicationsIntoDroneAsync(string serialNumber);
+        Task<ApiResponse> GetDronesAvailablesForLoadingAsync();
     }
 
     public class DroneService : IDroneService
@@ -74,7 +75,7 @@ namespace drones.API.Services
                     Medication medication = await _medicationRepository.GetMedicationByIdAsync(medicationDto.Code);
                     if (medication == null)
                     {
-                        _response.AddNotFoundResponse404(string.Format(MessageText.MEDICATION_NO_FOUND, medicationDto.Code));
+                        _response.AddNotFoundResponse404(string.Format(MessageText.MEDICATION_NOT_FOUND, medicationDto.Code));
                         return _response;
                     }
 
@@ -140,6 +141,27 @@ namespace drones.API.Services
             return _response;
         }
 
+        public async Task<ApiResponse> GetDronesAvailablesForLoadingAsync()
+        {
+            try
+            {
+                var drones = await _droneRepository.CheckAvailableForLoadingAsync();
+                if (!drones.Any())
+                {
+                    _response.AddNotFoundResponse404(MessageText.DRONE_NO_FOUND_AVAILABLES_FOR_LOADING);
+                }
+                else
+                {
+                    _response.AddOkResponse200(drones);
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.AddBadResponse400(ex.Message);
+            }
+            return _response;
+        }
+
         private async Task<ApiResponse> GetDroneByIdAsync(string serialNumber)
         {
             try
@@ -152,7 +174,7 @@ namespace drones.API.Services
                 var drone = await _droneRepository.GetDroneByIdAsync(serialNumber);
                 if (drone == null)
                 {
-                    _response.AddNotFoundResponse404(string.Format(MessageText.DRONE_NO_FOUND, serialNumber));
+                    _response.AddNotFoundResponse404(string.Format(MessageText.DRONE_NOT_FOUND, serialNumber));
                     return _response;
                 }
                 _response.AddOkResponse200(drone);
@@ -183,14 +205,14 @@ namespace drones.API.Services
                 }
 
                 Drone drone = (Drone)result.Result;
-                if (drone.BatteryCapacity < 25)
-                {
-                    _response.AddNotFoundResponse404(string.Format(MessageText.DRONE_STATE_NO_READY_TO_FLY_BATTERY_LOW, serialNumber, drone.BatteryCapacity));
-                    return _response;
-                }
                 if (drone.State != DroneState.IDLE)
                 {
                     _response.AddNotFoundResponse404(string.Format(MessageText.DRONE_STATE_NO_READY_TO_FLY_BUSY, serialNumber, drone.State.ToString()));
+                    return _response;
+                }
+                if (drone.BatteryCapacity < 25)
+                {
+                    _response.AddNotFoundResponse404(string.Format(MessageText.DRONE_STATE_NO_READY_TO_FLY_BATTERY_LOW, serialNumber, drone.BatteryCapacity));
                     return _response;
                 }
                 _response.AddOkResponse200(drone);

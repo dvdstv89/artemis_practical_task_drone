@@ -38,6 +38,20 @@ namespace drones.API.test
                  new Drone { SerialNumber = "10", Model = DroneModel.Lightweight, WeightLimit = 100, BatteryCapacity = 100, State = DroneState.IDLE }
         };
 
+        protected List<Drone> dronesListBusy = new List<Drone>
+        {
+                 new Drone { SerialNumber = "1", Model = DroneModel.Middleweight, WeightLimit = 200, BatteryCapacity = 80, State = DroneState.LOADED },
+                 new Drone { SerialNumber = "2", Model = DroneModel.Lightweight, WeightLimit = 300, BatteryCapacity = 70, State = DroneState.DELIVERING },
+                 new Drone { SerialNumber = "3", Model = DroneModel.Lightweight, WeightLimit = 400, BatteryCapacity = 18, State = DroneState.RETURNING },
+                 new Drone { SerialNumber = "4", Model = DroneModel.Lightweight, WeightLimit = 450, BatteryCapacity = 33, State = DroneState.RETURNING },
+                 new Drone { SerialNumber = "5", Model = DroneModel.Lightweight, WeightLimit = 300, BatteryCapacity = 1, State = DroneState.RETURNING },
+                 new Drone { SerialNumber = "6", Model = DroneModel.Lightweight, WeightLimit = 400, BatteryCapacity = 5, State = DroneState.RETURNING },
+                 new Drone { SerialNumber = "7", Model = DroneModel.Lightweight, WeightLimit = 500, BatteryCapacity = 75, State = DroneState.LOADED },
+                 new Drone { SerialNumber = "8", Model = DroneModel.Lightweight, WeightLimit = 500, BatteryCapacity = 80, State = DroneState.LOADED },
+                 new Drone { SerialNumber = "9", Model = DroneModel.Lightweight, WeightLimit = 300, BatteryCapacity = 98, State = DroneState.LOADED },
+                 new Drone { SerialNumber = "10", Model = DroneModel.Lightweight, WeightLimit = 100, BatteryCapacity = 100, State = DroneState.LOADED }
+        };
+
         protected List<Medication> medicationsList = new List<Medication>
         {
                  new Medication { Code = "M1", Name = "Med1", Weight = 80, Image = new byte[] { 255, 255, 255, 255 } },
@@ -68,7 +82,7 @@ namespace drones.API.test
             mapper = configuration.CreateMapper();
         }
 
-        protected void InitializeContext()
+        protected DroneApiDbContext CreateDatabase()
         {
             var nameDb = Guid.NewGuid().ToString();
             var services = new ServiceCollection();
@@ -83,9 +97,25 @@ namespace drones.API.test
             });
 
             var _serviceProvider = services.BuildServiceProvider();
+            return _serviceProvider.GetService<DroneApiDbContext>();
+        }
 
-            var db = _serviceProvider.GetService<DroneApiDbContext>();
+        protected void InitializeDefaultContext()
+        {
+            var db = CreateDatabase();
             db.AddRange(dronesList);
+            db.AddRange(medicationsList);
+            db.AddRange(droneMedicationList);
+            db.SaveChanges();
+            droneRepository = new DroneRepository(db);
+            droneMedicationRepository = new DroneMedicationRepository(db);
+            medicationRepository = new MedicationRepository(db);
+        }
+
+        protected void InitializeNoDroneAvailablesToFlyContext()
+        {
+            var db = CreateDatabase();
+            db.AddRange(dronesListBusy);
             db.AddRange(medicationsList);
             db.AddRange(droneMedicationList);
             db.SaveChanges();

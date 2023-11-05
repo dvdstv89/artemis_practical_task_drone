@@ -30,10 +30,7 @@ namespace drones.API.test.Services
                  new DroneMedicationDto { Code = "M1", Count = 1 },
                  new DroneMedicationDto { Code = "M2", Count = 1 },
                  new DroneMedicationDto { Code = "M3", Count = 1 }
-            };
-
-            InitializeContext();
-            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
+            };           
         }
 
         [Test]
@@ -45,6 +42,9 @@ namespace drones.API.test.Services
             {
                 newDrone.SerialNumber = "1";
             }
+
+            InitializeDefaultContext();
+            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
             var response = await droneService.RegisterDroneAsync(newDrone);
             string result = string.Join("\n", response.Errors);
             Console.WriteLine(result);
@@ -79,26 +79,28 @@ namespace drones.API.test.Services
                 medications = medicationsToLoadList;
             }
             else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit not found medication")
-            {
+            {              
                 serialNumber = "2";
                 medications = medicationsToLoadList;
                 medications.Add(new DroneMedicationDto { Code = "M15", Count = 1 });
             }
             else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit empty serial number")
-            {
+            {               
                 serialNumber = "";
                 medications = medicationsToLoadList;
             }
             else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit empty medications")
             {
-                // notthing to do
+               // nothing to do
             }
             else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit weight limit exceded")
-            {
+            {              
                 serialNumber = "10";
                 medications = medicationsToLoadList;
             }
 
+            InitializeDefaultContext();
+            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
             var response = await droneService.LoadMedicationsIntoDroneAsync(serialNumber, medications);
             string result = string.Join("\n", response.Errors);
             Console.WriteLine(result);
@@ -115,18 +117,41 @@ namespace drones.API.test.Services
 
             if (TestContext.CurrentContext.Test.Name == "Check loaded medication into the drone OK")
             {
-                // notthing to do
+               // nothing to do
             }
             else if (TestContext.CurrentContext.Test.Name == "Check loaded medication into the drone whit empty serial number")
             {
+                
                 serialNumber = "";
             }
             else if (TestContext.CurrentContext.Test.Name == "Check loaded medication into the drone whit not found drone")
-            {
+            {              
                 serialNumber = "100";
             }
-
+            InitializeDefaultContext();
+            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
             var response = await droneService.CheckLoadedMedicationsIntoDroneAsync(serialNumber);
+            string result = string.Join("\n", response.Errors);
+            Console.WriteLine(result);
+            Assert.AreEqual(statusCodeResult, response.StatusCode);
+        }
+
+        [Test]
+        [TestCase(HttpStatusCode.OK, TestName = "Check availables drones for loading OK")]
+        [TestCase(HttpStatusCode.NotFound, TestName = "Check availables drones for loading NotFound")]
+        public async Task CheckAvailableForLoading(HttpStatusCode statusCodeResult)
+        {
+            if (TestContext.CurrentContext.Test.Name == "Check availables drones for loading OK")
+            {
+                InitializeDefaultContext();
+            }
+            else if (TestContext.CurrentContext.Test.Name == "Check availables drones for loading NotFound")
+            {
+                InitializeNoDroneAvailablesToFlyContext();
+            }
+          
+            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
+            var response = await droneService.GetDronesAvailablesForLoadingAsync();
             string result = string.Join("\n", response.Errors);
             Console.WriteLine(result);
             Assert.AreEqual(statusCodeResult, response.StatusCode);

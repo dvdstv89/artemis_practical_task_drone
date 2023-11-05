@@ -7,6 +7,7 @@ namespace drones.API.Repositories
     public interface IDroneRepository : IBaseRepository<Drone>
     {
         Task<Drone> GetDroneByIdAsync(string serialNumber);
+        Task<IEnumerable<Drone>> CheckAvailableForLoadingAsync();
     }
 
     public class DroneRepository : BaseRepository<Drone>, IDroneRepository
@@ -18,8 +19,9 @@ namespace drones.API.Repositories
             try
             {
                 return await _context.Drones
-                .Include(d => d.DroneMedications)
-                .FirstOrDefaultAsync(d => d.SerialNumber == serialNumber);
+                   .Include(d => d.DroneMedications)
+                   .Where(d => d.SerialNumber == serialNumber)
+                   .FirstOrDefaultAsync();
             }
             catch (Exception)
             {
@@ -27,5 +29,18 @@ namespace drones.API.Repositories
             }
         }
 
+        public async Task<IEnumerable<Drone>> CheckAvailableForLoadingAsync()
+        {
+            try
+            {
+                return await _context.Drones
+                    .Where(d => d.State == DroneState.IDLE && d.BatteryCapacity > 25)
+                    .ToListAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
