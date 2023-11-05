@@ -6,7 +6,8 @@ namespace drones.API.Services
 {
     public interface IPeriodicTaskLogService
     {
-        Task<ApiResponse> RPeriodicTaskLogs();
+        Task<ApiResponse> PeriodicTaskLogs();
+        Task<ApiResponse> GetAllsByIdAsync(string serialNumber);
     }
 
     public class PeriodicTaskLogService : IPeriodicTaskLogService
@@ -21,7 +22,36 @@ namespace drones.API.Services
             _droneService = droneService;
         }
 
-        public async Task<ApiResponse> RPeriodicTaskLogs()
+        public async Task<ApiResponse> GetAllsByIdAsync(string serialNumber)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(serialNumber))
+                {
+                    throw new ArgumentException(MessageText.DRONE_SERIAL_NUMBER_EMPTY);
+                }
+                var result = await _periodicTaskLogRepository.GetLogByIdAsync(serialNumber);
+                if (result == null)
+                {
+                    _response.AddNotFoundResponse404(string.Format(MessageText.DRONE_LOG_NOT_FOUND, serialNumber));
+                }
+                else
+                {
+                    _response.AddOkResponse200(result);
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                _response.AddBadResponse400(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _response.AddBadResponse400(ex.Message);
+            }
+            return _response;
+        }
+
+        public async Task<ApiResponse> PeriodicTaskLogs()
         {
             try
             {

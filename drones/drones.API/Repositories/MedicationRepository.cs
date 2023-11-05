@@ -18,13 +18,14 @@ namespace drones.API.Repositories
             try
             {
                 return await _context.Medications
-                .FirstOrDefaultAsync(d => d.Code == code);
+                    .Where(d => d.Code == code)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync();
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
     }
 }

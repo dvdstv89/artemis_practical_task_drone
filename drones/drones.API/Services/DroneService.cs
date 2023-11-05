@@ -130,6 +130,11 @@ namespace drones.API.Services
                 {
                     Drone drone = (Drone)_response.Result;
                     IEnumerable<DroneMedicationCheckDto> medicationDtos = _mapper.Map<IEnumerable<DroneMedicationCheckDto>>(drone.DroneMedications);
+                    if(!medicationDtos.Any())
+                    {
+                        _response.AddNotFoundResponse404(string.Format(MessageText.MEDICATION_LOADED_NOT_FOUND, serialNumber));
+                        return _response;
+                    }
                     foreach (var item in medicationDtos)
                     {
                         item.Medication = await _medicationRepository.GetMedicationByIdAsync(item.MedicationCode);
@@ -137,7 +142,7 @@ namespace drones.API.Services
 
                     _response.AddOkResponse200(medicationDtos);
                 }
-            }
+            }            
             catch (Exception ex)
             {
                 _response.AddBadResponse400(ex.Message);

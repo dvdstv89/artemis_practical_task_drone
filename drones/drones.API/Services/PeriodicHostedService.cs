@@ -24,7 +24,7 @@ namespace drones.API.Services
                     using (var scope = _factory.CreateScope())
                     {
                         var periodicTaskLogService = scope.ServiceProvider.GetRequiredService<IPeriodicTaskLogService>();
-                        ApiResponse logsApiResponse = await periodicTaskLogService.RPeriodicTaskLogs();
+                        ApiResponse logsApiResponse = await periodicTaskLogService.PeriodicTaskLogs();
                         if (logsApiResponse.IsValid)
                         {
                             _logger.LogInformation((string)logsApiResponse.Result);

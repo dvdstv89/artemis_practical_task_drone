@@ -21,6 +21,7 @@ namespace drones.API.Repositories
                 return await _context.Drones
                    .Include(d => d.DroneMedications)
                    .Where(d => d.SerialNumber == serialNumber)
+                   .AsNoTracking()
                    .FirstOrDefaultAsync();
             }
             catch (Exception)
@@ -35,6 +36,7 @@ namespace drones.API.Repositories
             {
                 return await _context.Drones
                     .Where(d => d.State == DroneState.IDLE && d.BatteryCapacity > 25)
+                    .AsNoTracking()
                     .ToListAsync();
             }
             catch (Exception)

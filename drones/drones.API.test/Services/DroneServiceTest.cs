@@ -107,10 +107,11 @@ namespace drones.API.test.Services
         [TestCase(HttpStatusCode.OK, TestName = "Check loaded medication into the drone OK")]
         [TestCase(HttpStatusCode.BadRequest, TestName = "Check loaded medication into the drone whit empty serial number")]
         [TestCase(HttpStatusCode.NotFound, TestName = "Check loaded medication into the drone whit not found drone")]
+        [TestCase(HttpStatusCode.NotFound, TestName = "Check loaded medication into the drone whit not found medications")]
         public async Task CheckLoadedMedicationsIntoDroneTest(HttpStatusCode statusCodeResult)
         {
             //Arrange
-            string serialNumber = "1";
+            string serialNumber = "2";
             InitializeDefaultContext();
             droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
 
@@ -122,6 +123,10 @@ namespace drones.API.test.Services
             else if (TestContext.CurrentContext.Test.Name == "Check loaded medication into the drone whit not found drone")
             {
                 serialNumber = "100";
+            }
+            else if (TestContext.CurrentContext.Test.Name == "Check loaded medication into the drone whit not found medications")
+            {
+                serialNumber = "3";
             }
 
             var response = await droneService.CheckLoadedMedicationsIntoDroneAsync(serialNumber);

@@ -5,10 +5,8 @@ namespace drones.API.Data
 {
     public class DroneApiDbContext : DbContext
     {
-        public DroneApiDbContext(DbContextOptions<DroneApiDbContext> options) : base(options)
-        {
-            
-        }
+        public DroneApiDbContext(DbContextOptions<DroneApiDbContext> options) : base(options) { }
+
         public DbSet<Drone> Drones { get; set; }
         public DbSet<Medication> Medications { get; set; }
         public DbSet<DroneMedication> DroneMedication { get; set; }
@@ -16,7 +14,7 @@ namespace drones.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DroneMedication>().Property(e => e.Id).ValueGeneratedNever();           
+            modelBuilder.Entity<DroneMedication>().Property(e => e.Id).ValueGeneratedNever();
 
             modelBuilder.Entity<Drone>()
                 .HasMany(e => e.DroneMedications)
