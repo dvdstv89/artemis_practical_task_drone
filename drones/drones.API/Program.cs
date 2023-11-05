@@ -19,7 +19,6 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IDroneRepository, DroneRepository>();
 builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
 builder.Services.AddScoped<IDroneService, DroneService>();
-builder.Services.AddScoped<IDroneMedicationRepository, DroneMedicationRepository>();
 builder.Services.AddScoped<IPeriodicTaskLogService, PeriodicTaskLogService>();
 builder.Services.AddScoped<IPeriodicTaskLogRepository, PeriodicTaskLogRepository>();
 

@@ -20,8 +20,8 @@ namespace drones.API.Repositories
             {
                 return await _context.Drones
                    .Include(d => d.DroneMedications)
-                   .Where(d => d.SerialNumber == serialNumber)
-                   .AsNoTracking()
+                   .ThenInclude(dm => dm.Medication)
+                   .Where(d => d.SerialNumber == serialNumber)                  
                    .FirstOrDefaultAsync();
             }
             catch (Exception)
@@ -35,8 +35,7 @@ namespace drones.API.Repositories
             try
             {
                 return await _context.Drones
-                    .Where(d => d.State == DroneState.IDLE && d.BatteryCapacity > 25)
-                    .AsNoTracking()
+                    .Where(d => d.State == DroneState.IDLE && d.BatteryCapacity > 25)                    
                     .ToListAsync();
             }
             catch (Exception)

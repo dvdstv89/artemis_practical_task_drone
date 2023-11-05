@@ -18,8 +18,7 @@ namespace drones.API.Repositories
             try
             {
                 return await _context.PeriodicTaskLogs
-                    .Where(d => d.SerialNumber == serialNumber)
-                    .AsNoTracking()
+                    .Where(d => d.SerialNumber == serialNumber)                 
                     .ToListAsync();
             }
             catch (Exception)

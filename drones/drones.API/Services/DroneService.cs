@@ -22,16 +22,14 @@ namespace drones.API.Services
     {
         private readonly IDroneRepository _droneRepository;
         private readonly IMedicationRepository _medicationRepository;
-        private readonly IDroneMedicationRepository _droneMedicationRepository;
         private readonly IMapper _mapper;
         private ApiResponse _response;
 
-        public DroneService(IDroneRepository droneRepository, IMedicationRepository medicationRepository, IDroneMedicationRepository droneMedicationRepository, IMapper mapper)
+        public DroneService(IDroneRepository droneRepository, IMedicationRepository medicationRepository, IMapper mapper)
         {
             _response = new ApiResponse();
             _droneRepository = droneRepository;
             _medicationRepository = medicationRepository;
-            _droneMedicationRepository = droneMedicationRepository;
             _mapper = mapper;
         }
 
@@ -107,7 +105,7 @@ namespace drones.API.Services
                     throw new ArgumentException(string.Format(MessageText.DRONE_CARGO_WEIGHT_EXCEDED, drone.WeightLimit, totalWeight));
                 }
                 drone.State = DroneState.LOADED;
-                await LoadDroneAsync(drone);
+                await _droneRepository.UpdateAsync(drone);
                 _response.AddOkResponse200(MessageText.DRONE_LOADED);
             }
             catch (ArgumentException ex)
@@ -130,19 +128,14 @@ namespace drones.API.Services
                 {
                     Drone drone = (Drone)_response.Result;
                     IEnumerable<DroneMedicationCheckDto> medicationDtos = _mapper.Map<IEnumerable<DroneMedicationCheckDto>>(drone.DroneMedications);
-                    if(!medicationDtos.Any())
+                    if (!medicationDtos.Any())
                     {
                         _response.AddNotFoundResponse404(string.Format(MessageText.MEDICATION_LOADED_NOT_FOUND, serialNumber));
                         return _response;
                     }
-                    foreach (var item in medicationDtos)
-                    {
-                        item.Medication = await _medicationRepository.GetMedicationByIdAsync(item.MedicationCode);
-                    }
-
                     _response.AddOkResponse200(medicationDtos);
                 }
-            }            
+            }
             catch (Exception ex)
             {
                 _response.AddBadResponse400(ex.Message);
@@ -241,9 +234,9 @@ namespace drones.API.Services
         {
             try
             {
-                var result = await _droneRepository.GetAllAsync();                 
+                var result = await _droneRepository.GetAllAsync();
                 _response.AddOkResponse200(result);
-            }            
+            }
             catch (Exception ex)
             {
                 _response.AddBadResponse400(ex.Message);
@@ -315,23 +308,6 @@ namespace drones.API.Services
                 _response.AddBadResponse400(ex.Message);
             }
             return _response;
-        }
-
-        private async Task LoadDroneAsync(Drone drone)
-        {
-            try
-            {
-                IEnumerable<DroneMedication> droneMedications = drone.DroneMedications;
-                foreach (var droneMedication in droneMedications)
-                {
-                    await _droneMedicationRepository.AddAsync(droneMedication);
-                }
-                await _droneRepository.UpdateAsync(drone);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
         }
     }
 }

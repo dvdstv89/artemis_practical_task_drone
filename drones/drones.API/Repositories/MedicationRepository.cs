@@ -18,8 +18,7 @@ namespace drones.API.Repositories
             try
             {
                 return await _context.Medications
-                    .Where(d => d.Code == code)
-                    .AsNoTracking()
+                    .Where(d => d.Code == code)                    
                     .FirstOrDefaultAsync();
             }
             catch (Exception)

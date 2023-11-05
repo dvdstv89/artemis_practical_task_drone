@@ -18,13 +18,13 @@ namespace drones.API.Data
 
             modelBuilder.Entity<Drone>()
                 .HasMany(e => e.DroneMedications)
-                .WithOne()
+                .WithOne(e=> e.Drone)
                 .HasForeignKey(e => e.DroneSerialNumber)
                 .IsRequired();
 
             modelBuilder.Entity<Medication>()
                 .HasMany(e => e.DroneMedications)
-                .WithOne()
+                .WithOne(e => e.Medication)
                 .HasForeignKey(e => e.MedicationCode)
                 .IsRequired();
         }

@@ -23,8 +23,7 @@ namespace drones.API.test
     {
         protected IMapper mapper;
         protected IDroneRepository droneRepository;
-        protected IMedicationRepository medicationRepository;
-        protected IDroneMedicationRepository droneMedicationRepository;
+        protected IMedicationRepository medicationRepository;       
 
         protected List<Drone> dronesList = new List<Drone>
         {
@@ -109,8 +108,7 @@ namespace drones.API.test
             db.AddRange(medicationsList);
             db.AddRange(droneMedicationList);
             db.SaveChanges();
-            droneRepository = new DroneRepository(db);
-            droneMedicationRepository = new DroneMedicationRepository(db);
+            droneRepository = new DroneRepository(db);          
             medicationRepository = new MedicationRepository(db);
         }
 
@@ -121,8 +119,7 @@ namespace drones.API.test
             db.AddRange(medicationsList);
             db.AddRange(droneMedicationList);
             db.SaveChanges();
-            droneRepository = new DroneRepository(db);
-            droneMedicationRepository = new DroneMedicationRepository(db);
+            droneRepository = new DroneRepository(db);           
             medicationRepository = new MedicationRepository(db);
         }
     }

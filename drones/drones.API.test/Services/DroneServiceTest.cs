@@ -24,7 +24,7 @@ namespace drones.API.test.Services
                 State = DroneState.IDLE
             };
             InitializeDefaultContext();
-            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
+            droneService = new DroneService(droneRepository, medicationRepository, mapper);
 
             //Act    
             if (statusCodeResult == HttpStatusCode.BadRequest)
@@ -59,7 +59,7 @@ namespace drones.API.test.Services
                  new DroneMedicationDto { Code = "M3", Count = 1 }
             };
             InitializeDefaultContext();
-            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
+            droneService = new DroneService(droneRepository, medicationRepository, mapper);
             List<DroneMedicationDto> medications = null;
 
             //Act    
@@ -113,7 +113,7 @@ namespace drones.API.test.Services
             //Arrange
             string serialNumber = "2";
             InitializeDefaultContext();
-            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
+            droneService = new DroneService(droneRepository, medicationRepository,  mapper);
 
             //Act      
             if (TestContext.CurrentContext.Test.Name == "Check loaded medication into the drone whit empty serial number")
@@ -153,7 +153,7 @@ namespace drones.API.test.Services
                 InitializeNoDroneAvailablesToFlyContext();
             }
 
-            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
+            droneService = new DroneService(droneRepository, medicationRepository, mapper);
 
             //Act  
             var response = await droneService.GetDronesAvailablesForLoadingAsync();
@@ -172,7 +172,7 @@ namespace drones.API.test.Services
             //Arrange
             string serialNumber = "1";
             InitializeDefaultContext();
-            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
+            droneService = new DroneService(droneRepository, medicationRepository, mapper);
 
             //Act       
             if (TestContext.CurrentContext.Test.Name == "Check battery capacity whit empty serial number")
@@ -202,7 +202,7 @@ namespace drones.API.test.Services
             string serialNumber = "1";
             DroneBatteryLevelDto drone = new DroneBatteryLevelDto() { BatteryCapacity = 50 };
             InitializeDefaultContext();
-            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
+            droneService = new DroneService(droneRepository, medicationRepository, mapper);
 
             //Act           
             if (TestContext.CurrentContext.Test.Name == "Change battery capacity whit empty serial number")
@@ -234,7 +234,7 @@ namespace drones.API.test.Services
             string serialNumber = "1";
             DroneStateDto drone = new DroneStateDto() { State = DroneState.LOADED };
             InitializeDefaultContext();
-            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
+            droneService = new DroneService(droneRepository, medicationRepository, mapper);
 
             //Act
             if (TestContext.CurrentContext.Test.Name == "Change drone state whit empty serial number")

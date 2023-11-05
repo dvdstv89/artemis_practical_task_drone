@@ -38,8 +38,7 @@ namespace drones.API.Repositories
         public async Task UpdateAsync(T entity)
         {
             try
-            {
-                dbSet.Update(entity);
+            {               
                 await _context.SaveChangesAsync();
             }
             catch (Exception)
