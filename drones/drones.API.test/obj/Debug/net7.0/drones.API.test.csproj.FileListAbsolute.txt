@@ -1,4 +1,3 @@
-D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\bin\Debug\net7.0\CoverletSourceRootsMapping
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\bin\Debug\net7.0\testhost.dll
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\bin\Debug\net7.0\drones.API.deps.json
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\bin\Debug\net7.0\drones.API.runtimeconfig.json
@@ -116,3 +115,4 @@ D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\obj\Debug\net7.0\d
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\obj\Debug\net7.0\ref\drones.API.test.dll
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\bin\Debug\net7.0\AutoMapper.dll
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\bin\Debug\net7.0\CoverletSourceRootsMapping_drones.API.test

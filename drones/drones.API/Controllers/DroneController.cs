@@ -12,7 +12,7 @@ namespace drones.API.Controllers
     public class DroneController : BaseController<DroneController>
     {
         private readonly IDroneService _service;
-        public DroneController(ILogger<DroneController> logger, IDroneService droneService) : base(logger)
+        public DroneController(IDroneService droneService, ILogger<DroneController> logger = null) : base(logger)
         {
             _service = droneService;
         }

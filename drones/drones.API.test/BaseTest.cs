@@ -3,6 +3,8 @@ using drones.API.Data;
 using drones.API.DTO;
 using drones.API.Models;
 using drones.API.Repositories;
+using drones.API.Utils;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,7 +25,7 @@ namespace drones.API.test
     {
         protected IMapper mapper;
         protected IDroneRepository droneRepository;
-        protected IMedicationRepository medicationRepository;       
+        protected IMedicationRepository medicationRepository;
 
         protected List<Drone> dronesList = new List<Drone>
         {
@@ -108,7 +110,7 @@ namespace drones.API.test
             db.AddRange(medicationsList);
             db.AddRange(droneMedicationList);
             db.SaveChanges();
-            droneRepository = new DroneRepository(db);          
+            droneRepository = new DroneRepository(db);
             medicationRepository = new MedicationRepository(db);
         }
 
@@ -119,8 +121,37 @@ namespace drones.API.test
             db.AddRange(medicationsList);
             db.AddRange(droneMedicationList);
             db.SaveChanges();
-            droneRepository = new DroneRepository(db);           
+            droneRepository = new DroneRepository(db);
             medicationRepository = new MedicationRepository(db);
+        }
+
+        protected ApiResponse HandleApiResponse(ActionResult<ApiResponse> response)
+        {
+
+            if (response.Result is ObjectResult objectResult)
+            {
+                if (objectResult.Value is ApiResponse)
+                {
+                    return (ApiResponse)objectResult.Value;
+                }
+                else if (objectResult.Value is SerializableError serializableError)
+                {
+                    var apiResponse = new ApiResponse();
+                    foreach (var key in serializableError.Keys)
+                    {
+                        var values = serializableError[key] as string[];
+                        if (values != null && values.Length > 0)
+                        {
+                            foreach (var value in values)
+                            {
+                                apiResponse.AddBadResponse400($"{key}: {value}");
+                            }
+                        }
+                    }
+                    return apiResponse;
+                }
+            }
+            return null;
         }
     }
 }

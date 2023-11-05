@@ -1,17 +1,19 @@
-﻿using drones.API.DTO;
+﻿using drones.API.Controllers;
+using drones.API.DTO;
 using drones.API.Models;
 using drones.API.Services;
+using drones.API.Utils;
 using System.Net;
 
-namespace drones.API.test.Services
+namespace drones.API.test.Controllers
 {
-    internal class DroneServiceTest : BaseTest
-    {      
-
+    public class DroneControllerTest : BaseTest
+    {
         [Test]
         [TestCase(HttpStatusCode.Created, TestName = "Register drone Ok")]
         [TestCase(HttpStatusCode.BadRequest, TestName = "Register drone whit duplicate serial number")]
-        public async Task RegisterDroneTest(HttpStatusCode statusCodeResult)
+        [TestCase(HttpStatusCode.BadRequest, TestName = "Register drone whit bad entry data")]
+        public async Task RegisterNewDroneTest(HttpStatusCode statusCodeResult)
         {
             //Arrange
             Drone newDrone = new Drone()
@@ -24,19 +26,27 @@ namespace drones.API.test.Services
             };
             InitializeDefaultContext();
             IDroneService droneService = new DroneService(droneRepository, medicationRepository, mapper);
+            DroneController droneController = new DroneController(droneService);
+            //Act  
 
-            //Act    
             if (TestContext.CurrentContext.Test.Name == "Register drone whit duplicate serial number")
             {
                 newDrone.SerialNumber = "1";
             }
+            else if (TestContext.CurrentContext.Test.Name == "Register drone whit bad entry data")
+            {
+                droneController.ModelState.AddModelError("SerialNumber", "Invalid Serial Number");
+                droneController.ModelState.AddModelError("BatteryCapacity", "Invalid BatteryCapacity");
+                droneController.ModelState.AddModelError("WeightLimit", "Invalid WeightLimit");
+            }
 
-            var response = await droneService.RegisterDroneAsync(newDrone);
-            string result = string.Join("\n", response.Errors);
+            var response = await droneController.RegisterNewDrone(newDrone);
+            ApiResponse apiResponse = HandleApiResponse(response);
+            string result = string.Join("\n", apiResponse.Errors);
             Console.WriteLine(result);
 
             //Assert
-            Assert.AreEqual(statusCodeResult, response.StatusCode);
+            Assert.AreEqual(statusCodeResult, apiResponse.StatusCode);
         }
 
         [Test]
@@ -47,6 +57,7 @@ namespace drones.API.test.Services
         [TestCase(HttpStatusCode.BadRequest, TestName = "Load medication into drone whit empty serial number")]
         [TestCase(HttpStatusCode.BadRequest, TestName = "Load medication into drone whit empty medications")]
         [TestCase(HttpStatusCode.BadRequest, TestName = "Load medication into drone whit weight limit exceded")]
+        [TestCase(HttpStatusCode.BadRequest, TestName = "Load medication into drone whit bad data")]
         public async Task LoadMedicationsIntoDroneTest(HttpStatusCode statusCodeResult)
         {
             //Arrange
@@ -59,47 +70,48 @@ namespace drones.API.test.Services
             };
             InitializeDefaultContext();
             IDroneService droneService = new DroneService(droneRepository, medicationRepository, mapper);
-            List<DroneMedicationDto> medications = null;
+            DroneController droneController = new DroneController(droneService);
+           
 
             //Act    
-            if (TestContext.CurrentContext.Test.Name == "Load medication into drone Ok")
+            if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit empty medications")
             {
-                medications = medicationsToLoadList;
+                medicationsToLoadList = null;
             }
             else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit not found available drone BUSY")
             {
-                serialNumber = "4";
-                medications = medicationsToLoadList;
+                serialNumber = "4";              
             }
             else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit not found available drone BATTERY LOW")
             {
-                serialNumber = "6";
-                medications = medicationsToLoadList;
+                serialNumber = "6";              
             }
             else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit not found medication")
             {
-                serialNumber = "2";
-                medications = medicationsToLoadList;
-                medications.Add(new DroneMedicationDto { Code = "M15", Count = 1 });
+                serialNumber = "2";               
+                medicationsToLoadList.Add(new DroneMedicationDto { Code = "M15", Count = 1 });
             }
             else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit empty serial number")
             {
-                serialNumber = "";
-                medications = medicationsToLoadList;
+                serialNumber = "";              
             }
             else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit weight limit exceded")
             {
-                serialNumber = "10";
-                medications = medicationsToLoadList;
+                serialNumber = "10";              
+            }
+            else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit bad data")
+            {
+                droneController.ModelState.AddModelError("Code", "Invalid Code");
             }
 
 
-            var response = await droneService.LoadMedicationsIntoDroneAsync(serialNumber, medications);
-            string result = string.Join("\n", response.Errors);
+            var response = await droneController.LoadMedicationsIntoDrone(serialNumber, medicationsToLoadList);
+            ApiResponse apiResponse = HandleApiResponse(response);
+            string result = string.Join("\n", apiResponse.Errors);
             Console.WriteLine(result);
 
             //Assert
-            Assert.AreEqual(statusCodeResult, response.StatusCode);
+            Assert.AreEqual(statusCodeResult, apiResponse.StatusCode);
         }
 
         [Test]
@@ -112,7 +124,8 @@ namespace drones.API.test.Services
             //Arrange
             string serialNumber = "2";
             InitializeDefaultContext();
-            IDroneService droneService = new DroneService(droneRepository, medicationRepository,  mapper);
+            IDroneService droneService = new DroneService(droneRepository, medicationRepository, mapper);
+            DroneController droneController = new DroneController(droneService);
 
             //Act      
             if (TestContext.CurrentContext.Test.Name == "Check loaded medication into the drone whit empty serial number")
@@ -128,12 +141,13 @@ namespace drones.API.test.Services
                 serialNumber = "3";
             }
 
-            var response = await droneService.CheckLoadedMedicationsIntoDroneAsync(serialNumber);
-            string result = string.Join("\n", response.Errors);
+            var response = await droneController.CheckLoadMedicationsIntoDrone(serialNumber);
+            ApiResponse apiResponse = HandleApiResponse(response);
+            string result = string.Join("\n", apiResponse.Errors);
             Console.WriteLine(result);
 
             //Assert
-            Assert.AreEqual(statusCodeResult, response.StatusCode);
+            Assert.AreEqual(statusCodeResult, apiResponse.StatusCode);
         }
 
         [Test]
@@ -152,13 +166,16 @@ namespace drones.API.test.Services
             }
 
             IDroneService droneService = new DroneService(droneRepository, medicationRepository, mapper);
+            DroneController droneController = new DroneController(droneService);
 
             //Act  
-            var response = await droneService.GetDronesAvailablesForLoadingAsync();
-            string result = string.Join("\n", response.Errors);
+            var response = await droneController.CheckAvailableForLoading();
+            ApiResponse apiResponse = HandleApiResponse(response);
+            string result = string.Join("\n", apiResponse.Errors);
             Console.WriteLine(result);
+
             //Assert
-            Assert.AreEqual(statusCodeResult, response.StatusCode);
+            Assert.AreEqual(statusCodeResult, apiResponse.StatusCode);
         }
 
         [Test]
@@ -171,6 +188,7 @@ namespace drones.API.test.Services
             string serialNumber = "1";
             InitializeDefaultContext();
             IDroneService droneService = new DroneService(droneRepository, medicationRepository, mapper);
+            DroneController droneController = new DroneController(droneService);
 
             //Act       
             if (TestContext.CurrentContext.Test.Name == "Check battery capacity whit empty serial number")
@@ -182,25 +200,28 @@ namespace drones.API.test.Services
                 serialNumber = "100";
             }
 
-            var response = await droneService.CheckBatteryCapacityAsync(serialNumber);
-            string result = string.Join("\n", response.Errors);
+            var response = await droneController.CheckBatteryLevel(serialNumber);
+            ApiResponse apiResponse = HandleApiResponse(response);
+            string result = string.Join("\n", apiResponse.Errors);
             Console.WriteLine(result);
 
             //Assert
-            Assert.AreEqual(statusCodeResult, response.StatusCode);
+            Assert.AreEqual(statusCodeResult, apiResponse.StatusCode);
         }
 
         [Test]
         [TestCase(HttpStatusCode.OK, TestName = "Change battery capacity OK")]
         [TestCase(HttpStatusCode.BadRequest, TestName = "Change battery capacity whit empty serial number")]
         [TestCase(HttpStatusCode.NotFound, TestName = "Change battery capacity whit not found drone")]
+        [TestCase(HttpStatusCode.NotFound, TestName = "Change battery capacity whit bad data")]
         public async Task ChangeBatteryLevelTest(HttpStatusCode statusCodeResult)
         {
             //Arrange
             string serialNumber = "1";
-            DroneBatteryLevelDto drone = new DroneBatteryLevelDto() { BatteryCapacity = 50 };
+            DroneBatteryLevelDto drone = new DroneBatteryLevelDto() { BatteryCapacity = 50 };           
             InitializeDefaultContext();
             IDroneService droneService = new DroneService(droneRepository, medicationRepository, mapper);
+            DroneController droneController = new DroneController(droneService);
 
             //Act           
             if (TestContext.CurrentContext.Test.Name == "Change battery capacity whit empty serial number")
@@ -211,14 +232,18 @@ namespace drones.API.test.Services
             {
                 serialNumber = "100";
             }
+            else if (TestContext.CurrentContext.Test.Name == "Change battery capacity whit bad data")
+            {
+                droneController.ModelState.AddModelError("BatteryCapacity", "Invalid Battery Capacity");
+            }
 
-
-            var response = await droneService.ChangeBatteryLevelAsync(serialNumber, drone);
-            string result = string.Join("\n", response.Errors);
+            var response = await droneController.ChangeBatteryLevel(serialNumber, drone);
+            ApiResponse apiResponse = HandleApiResponse(response);
+            string result = string.Join("\n", apiResponse.Errors);
             Console.WriteLine(result);
 
             //Assert
-            Assert.AreEqual(statusCodeResult, response.StatusCode);
+            Assert.AreEqual(statusCodeResult, apiResponse.StatusCode);
         }
 
         [Test]
@@ -226,6 +251,7 @@ namespace drones.API.test.Services
         [TestCase(HttpStatusCode.BadRequest, TestName = "Change drone state whit empty serial number")]
         [TestCase(HttpStatusCode.BadRequest, TestName = "Change drone state whit to LOADING with battery low")]
         [TestCase(HttpStatusCode.NotFound, TestName = "Change drone state whit not found drone")]
+        [TestCase(HttpStatusCode.NotFound, TestName = "Change drone state whit bada data")]
         public async Task ChangeStateTest(HttpStatusCode statusCodeResult)
         {
             //Arrange
@@ -233,6 +259,7 @@ namespace drones.API.test.Services
             DroneStateDto drone = new DroneStateDto() { State = DroneState.LOADED };
             InitializeDefaultContext();
             IDroneService droneService = new DroneService(droneRepository, medicationRepository, mapper);
+            DroneController droneController = new DroneController(droneService);
 
             //Act
             if (TestContext.CurrentContext.Test.Name == "Change drone state whit empty serial number")
@@ -248,15 +275,18 @@ namespace drones.API.test.Services
             {
                 serialNumber = "100";
             }
+            else if (TestContext.CurrentContext.Test.Name == "Change drone state whit bada data")
+            {
+                droneController.ModelState.AddModelError("State", "Invalid State");
+            }
 
-
-            var response = await droneService.ChangeStateyAsync(serialNumber, drone);
-            string result = string.Join("\n", response.Errors);
+            var response = await droneController.ChangeDroneState(serialNumber, drone);
+            ApiResponse apiResponse = HandleApiResponse(response);
+            string result = string.Join("\n", apiResponse.Errors);
             Console.WriteLine(result);
 
             //Assert
-            Assert.AreEqual(statusCodeResult, response.StatusCode);
+            Assert.AreEqual(statusCodeResult, apiResponse.StatusCode);
         }
-
     }
 }

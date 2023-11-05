@@ -16,21 +16,21 @@ namespace drones.API.Controllers
         {
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                _logger.LogInformation(string.Format(MessageText.HANDLE_API_RESPONSE_OK, endpoint));
+                if (_logger != null) _logger.LogInformation(string.Format(MessageText.HANDLE_API_RESPONSE_OK, endpoint));
                 return Ok(response);
             }
             if (response.StatusCode == HttpStatusCode.Created)
             {
-                _logger.LogInformation(string.Format(MessageText.HANDLE_API_RESPONSE_CREATED, endpoint));
+                if (_logger != null) _logger.LogInformation(string.Format(MessageText.HANDLE_API_RESPONSE_CREATED, endpoint));
                 return CreatedAtAction(null, null, response);
             }
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                _logger.LogInformation(string.Format(MessageText.HANDLE_API_RESPONSE_NOT_FOUND, endpoint));
+                if (_logger != null) _logger.LogInformation(string.Format(MessageText.HANDLE_API_RESPONSE_NOT_FOUND, endpoint));
                 return NotFound(response);
             }
-            _logger.LogError(string.Format(MessageText.HANDLE_API_RESPONSE_BAD_RESPONSE, endpoint));
+            if (_logger != null) _logger.LogError(string.Format(MessageText.HANDLE_API_RESPONSE_BAD_RESPONSE, endpoint));
             return BadRequest(response);
         }
     }
