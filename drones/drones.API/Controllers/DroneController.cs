@@ -17,8 +17,9 @@ namespace drones.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerOperation(Summary = "Registering a new drone")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = MessageText.ENDPOINT_NAME_REGISTER_DRONE)]
         public async Task<ActionResult<ApiResponse>> RegisterNewDrone([FromBody] Drone drone)
         {
             if (!ModelState.IsValid)
@@ -26,7 +27,7 @@ namespace drones.API.Controllers
                 return BadRequest(ModelState);
             }
             ApiResponse response = await _service.RegisterDroneAsync(drone);
-            return await ProcessResponse(response);
+            return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_REGISTER_DRONE);
         }
     }
 }

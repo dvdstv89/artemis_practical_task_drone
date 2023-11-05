@@ -24,7 +24,44 @@ namespace drones.API.Services
         {
             try
             {
+                await GetDroneByIdAsync(drone.SerialNumber);
+                if (_response.IsOK)
+                {
+                    throw new ArgumentException(MessageText.DRONE_SERIAL_NUMBER_DUPLICATED);
+                }
+                if (_response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    await _repositoryDrone.AddAsync(drone);
+                    _response.AddCrateResponse204(drone);
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.AddBadResponse400(ex.Message);
+            }
+            return _response;
+        }
+
+        private async Task<ApiResponse> GetDroneByIdAsync(string serialNumber)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(serialNumber))
+                {
+                    throw new ArgumentException(string.Format(MessageText.DRONE_SERIAL_NUMBER_EMPTY, serialNumber));
+                }
+
+                var drone = await _repositoryDrone.GetDroneByIdAsync(serialNumber);
+                if (drone == null)
+                {
+                    _response.AddNotFoundResponse404(string.Format(MessageText.DRONE_NO_FOUND, serialNumber));
+                    return _response;
+                }
                 _response.AddOkResponse200(drone);
+            }
+            catch (ArgumentException ex)
+            {
+                _response.AddBadResponse400(ex.Message);
             }
             catch (Exception ex)
             {
