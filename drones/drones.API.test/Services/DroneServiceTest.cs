@@ -1,4 +1,5 @@
-﻿using drones.API.Models;
+﻿using drones.API.DTO;
+using drones.API.Models;
 using drones.API.Services;
 using System.Net;
 
@@ -8,6 +9,7 @@ namespace drones.API.test.Services
     {
         private IDroneService droneService;
         private Drone newDrone;
+        private List<DroneMedicationDto> medicationsToLoadList;
 
         [SetUp]
         public void Setup()
@@ -19,6 +21,13 @@ namespace drones.API.test.Services
                 WeightLimit = 200,
                 BatteryCapacity = 80,
                 State = DroneState.IDLE
+            };
+
+            medicationsToLoadList = new List<DroneMedicationDto>
+            {
+                 new DroneMedicationDto { Code = "M1", Count = 1 },
+                 new DroneMedicationDto { Code = "M2", Count = 1 },
+                 new DroneMedicationDto { Code = "M3", Count = 1 }
             };
 
             InitializeContext();
@@ -35,6 +44,60 @@ namespace drones.API.test.Services
                 newDrone.SerialNumber = "1";
             }
             var response = await droneService.RegisterDroneAsync(newDrone);
+            string result = string.Join("\n", response.Errors);
+            Console.WriteLine(result);
+            Assert.AreEqual(statusCodeResult, response.StatusCode);
+        }
+
+        [Test]
+        [TestCase(HttpStatusCode.OK, TestName = "Load medication into drone Ok")]
+        [TestCase(HttpStatusCode.NotFound, TestName = "Load medication into drone whit not found available drone BUSY")]
+        [TestCase(HttpStatusCode.NotFound, TestName = "Load medication into drone whit not found available drone BATTERY LOW")]
+        [TestCase(HttpStatusCode.NotFound, TestName = "Load medication into drone whit not found medication")]
+        [TestCase(HttpStatusCode.BadRequest, TestName = "Load medication into drone whit empty serial number")]
+        [TestCase(HttpStatusCode.BadRequest, TestName = "Load medication into drone whit empty medications")]
+        [TestCase(HttpStatusCode.BadRequest, TestName = "Load medication into drone whit weight limit exceded")]
+        public async Task LoadMedicationsIntoDrone(HttpStatusCode statusCodeResult)
+        {
+            string serialNumber = "1";
+            List<DroneMedicationDto> medications = null;
+
+            if (TestContext.CurrentContext.Test.Name == "Load medication into drone Ok")
+            {
+                medications = medicationsToLoadList;
+            }
+            else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit not found available drone BUSY")
+            {
+                serialNumber = "4";
+                medications = medicationsToLoadList;
+            }
+            else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit not found available drone BATTERY LOW")
+            {
+                serialNumber = "6";
+                medications = medicationsToLoadList;
+            }
+            else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit not found medication")
+            {
+                serialNumber = "2";
+                medications = medicationsToLoadList;
+                medications.Add(new DroneMedicationDto { Code = "M15", Count = 1 });
+            }
+            else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit empty serial number")
+            {
+                serialNumber = "";
+                medications = medicationsToLoadList;
+            }
+            else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit empty medications")
+            {
+                // notthing to do
+            }
+            else if (TestContext.CurrentContext.Test.Name == "Load medication into drone whit weight limit exceded")
+            {
+                serialNumber = "10";
+                medications = medicationsToLoadList;
+            }
+
+            var response = await droneService.LoadMedicationsIntoDroneAsync(serialNumber, medications);
             string result = string.Join("\n", response.Errors);
             Console.WriteLine(result);
             Assert.AreEqual(statusCodeResult, response.StatusCode);

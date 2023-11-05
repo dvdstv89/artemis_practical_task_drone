@@ -17,7 +17,7 @@ namespace drones.API.test
                  new Drone { SerialNumber = "1", Model = DroneModel.Middleweight, WeightLimit = 200, BatteryCapacity = 80, State = DroneState.IDLE },
                  new Drone { SerialNumber = "2", Model = DroneModel.Lightweight, WeightLimit = 300, BatteryCapacity = 70, State = DroneState.IDLE },
                  new Drone { SerialNumber = "3", Model = DroneModel.Lightweight, WeightLimit = 400, BatteryCapacity = 18, State = DroneState.RETURNING },
-                 new Drone { SerialNumber = "4", Model = DroneModel.Lightweight, WeightLimit = 450, BatteryCapacity = 23, State = DroneState.RETURNING },
+                 new Drone { SerialNumber = "4", Model = DroneModel.Lightweight, WeightLimit = 450, BatteryCapacity = 33, State = DroneState.RETURNING },
                  new Drone { SerialNumber = "5", Model = DroneModel.Lightweight, WeightLimit = 300, BatteryCapacity = 1, State = DroneState.IDLE },
                  new Drone { SerialNumber = "6", Model = DroneModel.Lightweight, WeightLimit = 400, BatteryCapacity = 5, State = DroneState.IDLE },
                  new Drone { SerialNumber = "7", Model = DroneModel.Lightweight, WeightLimit = 500, BatteryCapacity = 75, State = DroneState.IDLE },

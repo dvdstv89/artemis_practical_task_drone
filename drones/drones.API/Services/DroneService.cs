@@ -157,11 +157,13 @@ namespace drones.API.Services
                 Drone drone = (Drone)result.Result;
                 if (drone.BatteryCapacity < 25)
                 {
-                    throw new ArgumentException(string.Format(MessageText.DRONE_STATE_NO_READY_TO_FLY_BATTERY_LOW, serialNumber, drone.BatteryCapacity));
+                    _response.AddNotFoundResponse404(string.Format(MessageText.DRONE_STATE_NO_READY_TO_FLY_BATTERY_LOW, serialNumber, drone.BatteryCapacity));
+                    return _response;
                 }
                 if (drone.State != DroneState.IDLE)
                 {
-                    throw new ArgumentException(string.Format(MessageText.DRONE_STATE_NO_READY_TO_FLY_BUSY, serialNumber, drone.State.ToString()));
+                    _response.AddNotFoundResponse404(string.Format(MessageText.DRONE_STATE_NO_READY_TO_FLY_BUSY, serialNumber, drone.State.ToString()));
+                    return _response;
                 }
                 _response.AddOkResponse200(drone);
             }
