@@ -1,4 +1,5 @@
-﻿using drones.API.Models;
+﻿using drones.API.DTO;
+using drones.API.Models;
 using drones.API.Services;
 using drones.API.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,16 @@ namespace drones.API.Controllers
             }
             ApiResponse response = await _service.RegisterDroneAsync(drone);
             return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_REGISTER_DRONE);
+        }
+
+        [HttpPost("load-medications/{serialNumber}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = MessageText.ENDPOINT_NAME_LOAD_MEDICATION)]
+        public async Task<ActionResult<ApiResponse>> LoadMedicationsIntoDrone(string serialNumber, [FromBody] List<DroneMedicationDto> medications)
+        {
+            ApiResponse response = await _service.LoadMedicationsIntoDroneAsync(serialNumber, medications);
+            return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_LOAD_MEDICATION);
         }
     }
 }

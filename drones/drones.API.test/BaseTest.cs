@@ -9,6 +9,8 @@ namespace drones.API.test
     public class BaseTest
     {
         protected IDroneRepository droneRepository;
+        protected IMedicationRepository medicationRepository;
+        protected IDroneMedicationRepository droneMedicationRepository;
 
         protected List<Drone> dronesList = new List<Drone>
         {
@@ -66,6 +68,8 @@ namespace drones.API.test
             db.AddRange(droneMedicationList);
             db.SaveChanges();
             droneRepository = new DroneRepository(db);
+            droneMedicationRepository = new DroneMedicationRepository(db);
+            medicationRepository = new MedicationRepository(db);
         }
     }
 }

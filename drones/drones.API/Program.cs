@@ -16,6 +16,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IDroneRepository, DroneRepository>();
 builder.Services.AddScoped<IDroneService, DroneService>();
+builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
+builder.Services.AddScoped<IDroneMedicationRepository, DroneMedicationRepository>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

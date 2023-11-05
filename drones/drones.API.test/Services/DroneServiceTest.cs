@@ -22,7 +22,7 @@ namespace drones.API.test.Services
             };
 
             InitializeContext();
-            droneService = new DroneService(droneRepository);
+            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository);
         }
 
         [Test]
