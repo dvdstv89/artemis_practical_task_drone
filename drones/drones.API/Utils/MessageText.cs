@@ -1,6 +1,4 @@
-﻿using drones.API.Models;
-
-namespace drones.API.Utils
+﻿namespace drones.API.Utils
 {
     public class MessageText
     {
@@ -21,9 +19,10 @@ namespace drones.API.Utils
 
 
         public const string ENDPOINT_NAME_REGISTER_DRONE = "Registering a new drone";
-        public const string ENDPOINT_NAME_LOAD_MEDICATION = "Load medications Into a specific drone";       
+        public const string ENDPOINT_NAME_LOAD_MEDICATION = "Load medications Into a specific drone";
         public const string ENDPOINT_NAME_CKECK_LOAD_MEDICATION = "Check load medications into a specific drone";
         public const string ENDPOINT_NAME_CKECK_AVAILABLES_DRONES = "Check availables drones for loading";
+        public const string ENDPOINT_NAME_CKECK_BATTERY_LEVEL_DRONE = "Check battery capacity for a specif drone";
 
         public const string HANDLE_API_RESPONSE_OK = "Request processed successfully from endpoint => {0}";
         public const string HANDLE_API_RESPONSE_CREATED = "Resource created successfully from endpoint => {0}";

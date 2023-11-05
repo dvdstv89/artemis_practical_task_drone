@@ -53,13 +53,24 @@ namespace drones.API.Controllers
         }
 
         [HttpPost("chek-available-drone-for-loading")]
-        [ProducesResponseType(StatusCodes.Status200OK)]       
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation(Summary = MessageText.ENDPOINT_NAME_CKECK_AVAILABLES_DRONES)]
         public async Task<ActionResult<ApiResponse>> CheckAvailableForLoading()
         {
             ApiResponse response = await _service.GetDronesAvailablesForLoadingAsync();
             return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_CKECK_AVAILABLES_DRONES);
+        }
+
+        [HttpPost("chek-battery-capacity/{serialNumber}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Summary = MessageText.ENDPOINT_NAME_CKECK_BATTERY_LEVEL_DRONE)]
+        public async Task<ActionResult<ApiResponse>> CheckBatteryLevel(string serialNumber)
+        {
+            ApiResponse response = await _service.CheckBatteryCapacityAsync(serialNumber);
+            return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_CKECK_BATTERY_LEVEL_DRONE);
         }
     }
 }

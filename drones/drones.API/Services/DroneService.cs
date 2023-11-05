@@ -12,6 +12,7 @@ namespace drones.API.Services
         Task<ApiResponse> LoadMedicationsIntoDroneAsync(string serialNumber, List<DroneMedicationDto> medications);
         Task<ApiResponse> CheckLoadedMedicationsIntoDroneAsync(string serialNumber);
         Task<ApiResponse> GetDronesAvailablesForLoadingAsync();
+        Task<ApiResponse> CheckBatteryCapacityAsync(string serialNumber);
     }
 
     public class DroneService : IDroneService
@@ -153,6 +154,24 @@ namespace drones.API.Services
                 else
                 {
                     _response.AddOkResponse200(drones);
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.AddBadResponse400(ex.Message);
+            }
+            return _response;
+        }
+
+        public async Task<ApiResponse> CheckBatteryCapacityAsync(string serialNumber)
+        {
+            try
+            {
+                await GetDroneByIdAsync(serialNumber);
+                if (_response.IsOK)
+                {
+                    DroneBatteryLevelDto drone = _mapper.Map<DroneBatteryLevelDto>((Drone)_response.Result);
+                    _response.AddOkResponse200(drone);
                 }
             }
             catch (Exception ex)
