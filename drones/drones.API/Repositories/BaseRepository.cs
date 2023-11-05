@@ -1,4 +1,5 @@
 ﻿using drones.API.Data;
+using drones.API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace drones.API.Repositories
@@ -7,6 +8,7 @@ namespace drones.API.Repositories
     {
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
+        Task<IEnumerable<T>> GetAllAsync();
     }
 
     public class BaseRepository<T> : IBaseRepository<T> where T : class
@@ -39,6 +41,18 @@ namespace drones.API.Repositories
             {
                 dbSet.Update(entity);
                 await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            try
+            {
+                return await dbSet.ToListAsync();
             }
             catch (Exception)
             {

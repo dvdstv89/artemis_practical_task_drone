@@ -12,6 +12,7 @@ namespace drones.API.Data
         public DbSet<Drone> Drones { get; set; }
         public DbSet<Medication> Medications { get; set; }
         public DbSet<DroneMedication> DroneMedication { get; set; }
+        public DbSet<PeriodicTaskLog> PeriodicTaskLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

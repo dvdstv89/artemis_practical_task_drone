@@ -6,6 +6,7 @@
         public const string DRONE_CHANGE_STATE_TO_LOADING_WITH_BATTERY_LOW = "The drone SN:{0} has the battery status low {1}%";
         public const string DRONE_LOADED = "The drone was loaded with the medication satisfactorily.";
         public const string DRONE_NOT_FOUND = "No drone found with the serial number {0}";
+        public const string DRONE_NOT_FOUND_EMPTY_DB = "No drone founds in the database";
         public const string DRONE_NOT_FOUND_AVAILABLES_FOR_LOADING = "No drone found availablea for loading";
         public const string DRONE_SERIAL_NUMBER_DUPLICATED = "Exist a drone registered with that serial number {0}";
         public const string DRONE_SERIAL_NUMBER_EMPTY = "The serial number of the drone cannot be empty";
@@ -30,5 +31,7 @@
         public const string HANDLE_API_RESPONSE_CREATED = "Resource created successfully from endpoint => {0}";
         public const string HANDLE_API_RESPONSE_NOT_FOUND = "Resource not found from endpoint => {0}";
         public const string HANDLE_API_RESPONSE_BAD_RESPONSE = "Bad request received from endpoint =>  {0}";
+
+        public const string PERIODIC_TASK_EXCEPTION = " Failed to execute PeriodicHostedService with exception message {0}";
     }
 }

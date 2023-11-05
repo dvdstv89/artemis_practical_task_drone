@@ -15,6 +15,7 @@ namespace drones.API.Services
         Task<ApiResponse> CheckBatteryCapacityAsync(string serialNumber);
         Task<ApiResponse> ChangeBatteryLevelAsync(string serialNumber, DroneBatteryLevelDto drone);
         Task<ApiResponse> ChangeStateyAsync(string serialNumber, DroneStateDto newDroneState);
+        Task<ApiResponse> GetAllDroneAsync();
     }
 
     public class DroneService : IDroneService
@@ -224,6 +225,20 @@ namespace drones.API.Services
                     _response.AddOkResponse200(drone);
                 }
             }
+            catch (Exception ex)
+            {
+                _response.AddBadResponse400(ex.Message);
+            }
+            return _response;
+        }
+
+        public async Task<ApiResponse> GetAllDroneAsync()
+        {
+            try
+            {
+                var result = await _droneRepository.GetAllAsync();                 
+                _response.AddOkResponse200(result);
+            }            
             catch (Exception ex)
             {
                 _response.AddBadResponse400(ex.Message);
