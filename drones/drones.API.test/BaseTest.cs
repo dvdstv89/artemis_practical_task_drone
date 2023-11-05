@@ -15,6 +15,7 @@ namespace drones.API.test
             CreateMap<DroneMedication, DroneMedicationDto>().ReverseMap();
             CreateMap<DroneMedication, DroneMedicationCheckDto>().ReverseMap();
             CreateMap<Drone, DroneBatteryLevelDto>().ReverseMap();
+            CreateMap<Drone, DroneStateDto>().ReverseMap();
         }
     }
 

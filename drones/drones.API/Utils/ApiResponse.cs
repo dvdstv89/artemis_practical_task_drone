@@ -5,7 +5,7 @@ namespace drones.API.Utils
     public class ApiResponse
     {
         public HttpStatusCode StatusCode { get; set; }
-        public bool IsOK { get; set; }
+        public bool IsValid { get; set; }
         public List<string> Errors { get; set; }
         public object Result { get; set; }
         public ApiResponse()
@@ -17,7 +17,7 @@ namespace drones.API.Utils
         {
             Result = result;
             StatusCode = HttpStatusCode.OK;
-            IsOK = true;
+            IsValid = true;
             Errors = new List<string>();
         }
 
@@ -25,21 +25,21 @@ namespace drones.API.Utils
         {
             Result = result;
             StatusCode = HttpStatusCode.Created;
-            IsOK = true;
+            IsValid = true;
             Errors = new List<string>();
         }
 
         public void AddBadResponse400(string exception)
         {
             StatusCode = HttpStatusCode.BadRequest;
-            IsOK = false;
+            IsValid = false;
             Errors.Add(exception);
         }
 
         public void AddNotFoundResponse404(string mensaje)
         {
             StatusCode = HttpStatusCode.NotFound;
-            IsOK = false;
+            IsValid = false;
             Errors.Add(mensaje);
         }
     }

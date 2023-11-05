@@ -13,6 +13,8 @@ namespace drones.API.Services
         Task<ApiResponse> CheckLoadedMedicationsIntoDroneAsync(string serialNumber);
         Task<ApiResponse> GetDronesAvailablesForLoadingAsync();
         Task<ApiResponse> CheckBatteryCapacityAsync(string serialNumber);
+        Task<ApiResponse> ChangeBatteryLevelAsync(string serialNumber, DroneBatteryLevelDto drone);
+        Task<ApiResponse> ChangeStateyAsync(string serialNumber, DroneStateDto newDroneState);
     }
 
     public class DroneService : IDroneService
@@ -37,7 +39,7 @@ namespace drones.API.Services
             try
             {
                 await GetDroneByIdAsync(drone.SerialNumber);
-                if (_response.IsOK)
+                if (_response.IsValid)
                 {
                     throw new ArgumentException(string.Format(MessageText.DRONE_SERIAL_NUMBER_DUPLICATED, drone.SerialNumber));
                 }
@@ -63,7 +65,7 @@ namespace drones.API.Services
                     throw new ArgumentException(MessageText.MEDICATIONS_EMPTY);
                 }
                 await GetDroneAvailableForLoadingAsync(serialNumber);
-                if (!_response.IsOK)
+                if (!_response.IsValid)
                 {
                     return _response;
                 }
@@ -123,7 +125,7 @@ namespace drones.API.Services
             try
             {
                 await GetDroneByIdAsync(serialNumber);
-                if (_response.IsOK)
+                if (_response.IsValid)
                 {
                     Drone drone = (Drone)_response.Result;
                     IEnumerable<DroneMedicationCheckDto> medicationDtos = _mapper.Map<IEnumerable<DroneMedicationCheckDto>>(drone.DroneMedications);
@@ -149,7 +151,7 @@ namespace drones.API.Services
                 var drones = await _droneRepository.CheckAvailableForLoadingAsync();
                 if (!drones.Any())
                 {
-                    _response.AddNotFoundResponse404(MessageText.DRONE_NO_FOUND_AVAILABLES_FOR_LOADING);
+                    _response.AddNotFoundResponse404(MessageText.DRONE_NOT_FOUND_AVAILABLES_FOR_LOADING);
                 }
                 else
                 {
@@ -168,9 +170,57 @@ namespace drones.API.Services
             try
             {
                 await GetDroneByIdAsync(serialNumber);
-                if (_response.IsOK)
+                if (_response.IsValid)
                 {
                     DroneBatteryLevelDto drone = _mapper.Map<DroneBatteryLevelDto>((Drone)_response.Result);
+                    _response.AddOkResponse200(drone);
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.AddBadResponse400(ex.Message);
+            }
+            return _response;
+        }
+
+        public async Task<ApiResponse> ChangeStateyAsync(string serialNumber, DroneStateDto newDroneState)
+        {
+            try
+            {
+                await GetDroneByIdAsync(serialNumber);
+                if (_response.IsValid)
+                {
+                    Drone drone = (Drone)_response.Result;
+                    if (drone.BatteryCapacity < 25 && newDroneState.State == DroneState.LOADING)
+                    {
+                        throw new ArgumentException(string.Format(MessageText.DRONE_CHANGE_STATE_TO_LOADING_WITH_BATTERY_LOW, serialNumber, drone.BatteryCapacity));
+                    }
+                    drone.State = newDroneState.State;
+                    await _droneRepository.UpdateAsync(drone);
+                    _response.AddOkResponse200(drone);
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                _response.AddBadResponse400(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _response.AddBadResponse400(ex.Message);
+            }
+            return _response;
+        }
+
+        public async Task<ApiResponse> ChangeBatteryLevelAsync(string serialNumber, DroneBatteryLevelDto newDroneBatteryLevel)
+        {
+            try
+            {
+                await GetDroneByIdAsync(serialNumber);
+                if (_response.IsValid)
+                {
+                    Drone drone = (Drone)_response.Result;
+                    drone.BatteryCapacity = newDroneBatteryLevel.BatteryCapacity;
+                    await _droneRepository.UpdateAsync(drone);
                     _response.AddOkResponse200(drone);
                 }
             }
@@ -218,7 +268,7 @@ namespace drones.API.Services
                     throw new ArgumentException(MessageText.DRONE_SERIAL_NUMBER_EMPTY);
                 }
                 var result = await GetDroneByIdAsync(serialNumber);
-                if (!result.IsOK)
+                if (!result.IsValid)
                 {
                     return result;
                 }

@@ -37,6 +37,10 @@ namespace drones.API.Controllers
         [SwaggerOperation(Summary = MessageText.ENDPOINT_NAME_LOAD_MEDICATION)]
         public async Task<ActionResult<ApiResponse>> LoadMedicationsIntoDrone(string serialNumber, [FromBody] List<DroneMedicationDto> medications)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             ApiResponse response = await _service.LoadMedicationsIntoDroneAsync(serialNumber, medications);
             return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_LOAD_MEDICATION);
         }
@@ -71,6 +75,37 @@ namespace drones.API.Controllers
         {
             ApiResponse response = await _service.CheckBatteryCapacityAsync(serialNumber);
             return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_CKECK_BATTERY_LEVEL_DRONE);
+        }
+
+        [HttpPost("change-battery-level/{serialNumber}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Summary = MessageText.ENDPOINT_NAME_Change_BATTERY_LEVEL_DRONE, Tags = new[] { "Tools" })]
+        public async Task<ActionResult<ApiResponse>> ChangeBatteryLevel(string serialNumber, [FromBody] DroneBatteryLevelDto drone)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            ApiResponse response = await _service.ChangeBatteryLevelAsync(serialNumber, drone);
+            return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_Change_BATTERY_LEVEL_DRONE);
+        }
+
+
+        [HttpPost("change-state/{serialNumber}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Summary = MessageText.ENDPOINT_NAME_Change_STATE_DRONE, Tags = new[] { "Tools" })]
+        public async Task<ActionResult<ApiResponse>> ChangeDroneState(string serialNumber, [FromBody] DroneStateDto drone)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            ApiResponse response = await _service.ChangeStateyAsync(serialNumber, drone);
+            return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_Change_STATE_DRONE);
         }
     }
 }
