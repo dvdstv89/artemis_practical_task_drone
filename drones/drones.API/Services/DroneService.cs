@@ -1,4 +1,5 @@
 ﻿using drones.API.Models;
+using drones.API.Repositories;
 using drones.API.Utils;
 
 namespace drones.API.Services
@@ -10,27 +11,24 @@ namespace drones.API.Services
 
     public class DroneService : IDroneService
     {
+        private readonly IDroneRepository _repositoryDrone;
         private ApiResponse _response;
 
-        public DroneService()
+        public DroneService(IDroneRepository droneRepository)
         {
             _response = new ApiResponse();
+            _repositoryDrone = droneRepository;
         }
 
         public async Task<ApiResponse> RegisterDroneAsync(Drone drone)
         {
             try
             {
-                _response.IsOK = true;
-                _response.Result = drone;
-                _response.StatusCode = System.Net.HttpStatusCode.OK;
-
+                _response.AddOkResponse200(drone);
             }
             catch (Exception ex)
             {
-                _response.IsOK = false;
-                _response.Errors.Add(ex.Message);
-                _response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                _response.AddBadResponse400(ex.Message);
             }
             return _response;
         }

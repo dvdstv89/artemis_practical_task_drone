@@ -1,12 +1,20 @@
+using drones.API.Data;
+using drones.API.Repositories;
 using drones.API.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<DroneApiDbContext>(options =>
+{
+    options.UseInMemoryDatabase("DroneDB");
+});
 
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<IDroneRepository, DroneRepository>();
 builder.Services.AddScoped<IDroneService, DroneService>();
 
 
@@ -24,6 +32,13 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<DroneApiDbContext>();
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

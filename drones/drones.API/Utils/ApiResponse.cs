@@ -12,5 +12,35 @@ namespace drones.API.Utils
         {
             Errors = new List<string>();
         }
+
+        public void AddOkResponse200(object result)
+        {
+            Result = result;
+            StatusCode = HttpStatusCode.OK;
+            IsOK = true;
+            Errors = new List<string>();
+        }
+
+        public void AddCrateResponse204(object result)
+        {
+            Result = result;
+            StatusCode = HttpStatusCode.Created;
+            IsOK = true;
+            Errors = new List<string>();
+        }
+
+        public void AddBadResponse400(string exception)
+        {
+            StatusCode = HttpStatusCode.BadRequest;
+            IsOK = false;
+            Errors.Add(exception);
+        }
+
+        public void AddNotFoundResponse404(string mensaje)
+        {
+            StatusCode = HttpStatusCode.NotFound;
+            IsOK = false;
+            Errors.Add(mensaje);
+        }
     }
 }

@@ -32,3 +32,6 @@ D:\PRUEBA\artemis_practical_task_drone\drones\drones.API\obj\Debug\net7.0\drones
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API\obj\Debug\net7.0\drones.API.genruntimeconfig.cache
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API\obj\Debug\net7.0\ref\drones.API.dll
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API\bin\Debug\net7.0\Swashbuckle.AspNetCore.Annotations.dll
+D:\PRUEBA\artemis_practical_task_drone\drones\drones.API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
+D:\PRUEBA\artemis_practical_task_drone\drones\drones.API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\PRUEBA\artemis_practical_task_drone\drones\drones.API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.InMemory.dll
