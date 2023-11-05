@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "8G38fRHg23JtBl+IXPBwy5EoCHG9BHpuaLLuflJSHg6d01vux+kst1v84p7EO59FHI1iwLFMHr5x45esvKP3Ww==",
+  "dgSpecHash": "0VNE7MjU0GXIL15dNsipkDmAhefsJTFQtURqwI+zaME30mVuhQtnkmvS7zqI6gJFjBbjFbTrLbkdohgtYJXd4Q==",
   "success": true,
   "projectFilePath": "D:\\PRUEBA\\artemis_practical_task_drone\\drones\\drones.API\\drones.API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Appollo\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\Appollo\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\Appollo\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.1\\microsoft.aspnetcore.openapi.7.0.1.nupkg.sha512",
+    "C:\\Users\\Appollo\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Appollo\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.13\\microsoft.entityframeworkcore.7.0.13.nupkg.sha512",
     "C:\\Users\\Appollo\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.13\\microsoft.entityframeworkcore.abstractions.7.0.13.nupkg.sha512",
     "C:\\Users\\Appollo\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.13\\microsoft.entityframeworkcore.analyzers.7.0.13.nupkg.sha512",

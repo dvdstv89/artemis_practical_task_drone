@@ -1,6 +1,7 @@
 using drones.API.Data;
 using drones.API.Repositories;
 using drones.API.Services;
+using drones.API.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<DroneApiDbContext>(options =>
     options.UseInMemoryDatabase("DroneDB");
 });
 
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IDroneRepository, DroneRepository>();

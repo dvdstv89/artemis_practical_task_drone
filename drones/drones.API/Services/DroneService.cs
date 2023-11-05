@@ -1,4 +1,5 @@
-﻿using drones.API.DTO;
+﻿using AutoMapper;
+using drones.API.DTO;
 using drones.API.Models;
 using drones.API.Repositories;
 using drones.API.Utils;
@@ -9,6 +10,7 @@ namespace drones.API.Services
     {
         Task<ApiResponse> RegisterDroneAsync(Drone drone);
         Task<ApiResponse> LoadMedicationsIntoDroneAsync(string serialNumber, List<DroneMedicationDto> medications);
+        Task<ApiResponse> CheckLoadedMedicationsIntoDroneAsync(string serialNumber);
     }
 
     public class DroneService : IDroneService
@@ -16,14 +18,16 @@ namespace drones.API.Services
         private readonly IDroneRepository _droneRepository;
         private readonly IMedicationRepository _medicationRepository;
         private readonly IDroneMedicationRepository _droneMedicationRepository;
+        private readonly IMapper _mapper;
         private ApiResponse _response;
 
-        public DroneService(IDroneRepository droneRepository, IMedicationRepository medicationRepository, IDroneMedicationRepository droneMedicationRepository)
+        public DroneService(IDroneRepository droneRepository, IMedicationRepository medicationRepository, IDroneMedicationRepository droneMedicationRepository, IMapper mapper)
         {
             _response = new ApiResponse();
             _droneRepository = droneRepository;
             _medicationRepository = medicationRepository;
             _droneMedicationRepository = droneMedicationRepository;
+            _mapper = mapper;
         }
 
         public async Task<ApiResponse> RegisterDroneAsync(Drone drone)
@@ -104,6 +108,30 @@ namespace drones.API.Services
             catch (ArgumentException ex)
             {
                 _response.AddBadResponse400(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _response.AddBadResponse400(ex.Message);
+            }
+            return _response;
+        }
+
+        public async Task<ApiResponse> CheckLoadedMedicationsIntoDroneAsync(string serialNumber)
+        {
+            try
+            {
+                await GetDroneByIdAsync(serialNumber);
+                if (_response.IsOK)
+                {
+                    Drone drone = (Drone)_response.Result;
+                    IEnumerable<DroneMedicationCheckDto> medicationDtos = _mapper.Map<IEnumerable<DroneMedicationCheckDto>>(drone.DroneMedications);
+                    foreach (var item in medicationDtos)
+                    {
+                        item.Medication = await _medicationRepository.GetMedicationByIdAsync(item.MedicationCode);
+                    }
+
+                    _response.AddOkResponse200(medicationDtos);
+                }
             }
             catch (Exception ex)
             {

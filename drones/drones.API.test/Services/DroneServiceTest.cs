@@ -5,6 +5,8 @@ using System.Net;
 
 namespace drones.API.test.Services
 {
+
+
     internal class DroneServiceTest : BaseTest
     {
         private IDroneService droneService;
@@ -31,7 +33,7 @@ namespace drones.API.test.Services
             };
 
             InitializeContext();
-            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository);
+            droneService = new DroneService(droneRepository, medicationRepository, droneMedicationRepository, mapper);
         }
 
         [Test]
@@ -98,6 +100,33 @@ namespace drones.API.test.Services
             }
 
             var response = await droneService.LoadMedicationsIntoDroneAsync(serialNumber, medications);
+            string result = string.Join("\n", response.Errors);
+            Console.WriteLine(result);
+            Assert.AreEqual(statusCodeResult, response.StatusCode);
+        }
+
+        [Test]
+        [TestCase(HttpStatusCode.OK, TestName = "Check loaded medication into the drone OK")]
+        [TestCase(HttpStatusCode.BadRequest, TestName = "Check loaded medication into the drone whit empty serial number")]
+        [TestCase(HttpStatusCode.NotFound, TestName = "Check loaded medication into the drone whit not found drone")]
+        public async Task CheckLoadedMedicationsIntoDroneAsync(HttpStatusCode statusCodeResult)
+        {
+            string serialNumber = "1";
+
+            if (TestContext.CurrentContext.Test.Name == "Check loaded medication into the drone OK")
+            {
+                // notthing to do
+            }
+            else if (TestContext.CurrentContext.Test.Name == "Check loaded medication into the drone whit empty serial number")
+            {
+                serialNumber = "";
+            }
+            else if (TestContext.CurrentContext.Test.Name == "Check loaded medication into the drone whit not found drone")
+            {
+                serialNumber = "100";
+            }
+
+            var response = await droneService.CheckLoadedMedicationsIntoDroneAsync(serialNumber);
             string result = string.Join("\n", response.Errors);
             Console.WriteLine(result);
             Assert.AreEqual(statusCodeResult, response.StatusCode);

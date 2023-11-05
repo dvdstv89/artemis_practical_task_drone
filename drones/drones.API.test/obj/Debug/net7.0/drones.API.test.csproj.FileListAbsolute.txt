@@ -114,3 +114,5 @@ D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\obj\Debug\net7.0\r
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\obj\Debug\net7.0\drones.API.test.pdb
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\obj\Debug\net7.0\drones.API.test.genruntimeconfig.cache
 D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\obj\Debug\net7.0\ref\drones.API.test.dll
+D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\bin\Debug\net7.0\AutoMapper.dll
+D:\PRUEBA\artemis_practical_task_drone\drones\drones.API.test\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

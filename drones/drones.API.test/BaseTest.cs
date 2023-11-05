@@ -1,4 +1,6 @@
-﻿using drones.API.Data;
+﻿using AutoMapper;
+using drones.API.Data;
+using drones.API.DTO;
 using drones.API.Models;
 using drones.API.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -6,8 +8,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace drones.API.test
 {
+    public class MappingProfile : Profile
+    {
+        public MappingProfile()
+        {
+            CreateMap<DroneMedication, DroneMedicationDto>().ReverseMap();
+            CreateMap<DroneMedication, DroneMedicationCheckDto>().ReverseMap();
+        }
+    }
+
     public class BaseTest
     {
+        protected IMapper mapper;
         protected IDroneRepository droneRepository;
         protected IMedicationRepository medicationRepository;
         protected IDroneMedicationRepository droneMedicationRepository;
@@ -45,6 +57,16 @@ namespace drones.API.test
                  new  DroneMedication  { DroneSerialNumber = "2", MedicationCode = "M1", Count = 1 },
                  new  DroneMedication  { DroneSerialNumber = "2", MedicationCode = "M2", Count = 1 },
         };
+
+        [SetUp]
+        public void Setup()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+            mapper = configuration.CreateMapper();
+        }
 
         protected void InitializeContext()
         {

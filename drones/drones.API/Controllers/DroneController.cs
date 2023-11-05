@@ -40,5 +40,16 @@ namespace drones.API.Controllers
             ApiResponse response = await _service.LoadMedicationsIntoDroneAsync(serialNumber, medications);
             return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_LOAD_MEDICATION);
         }
+
+        [HttpPost("chek-load-medications/{serialNumber}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Summary = MessageText.ENDPOINT_NAME_CKECK_LOAD_MEDICATION)]
+        public async Task<ActionResult<ApiResponse>> CheckLoadMedicationsIntoDrone(string serialNumber)
+        {
+            ApiResponse response = await _service.CheckLoadedMedicationsIntoDroneAsync(serialNumber);
+            return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_LOAD_MEDICATION);
+        }
     }
 }
