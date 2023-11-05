@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace drones.API.Utils
+﻿namespace drones.API.Utils
 {
     public class MessageText
     {

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "drones.API", "drones.API\drones.API.csproj", "{9275193F-8157-4191-BAE4-CC400E5A852B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "drones.API.test", "drones.API.test\drones.API.test.csproj", "{A711D089-5550-4062-8D7B-A652FC4CF2A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{9275193F-8157-4191-BAE4-CC400E5A852B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9275193F-8157-4191-BAE4-CC400E5A852B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9275193F-8157-4191-BAE4-CC400E5A852B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A711D089-5550-4062-8D7B-A652FC4CF2A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A711D089-5550-4062-8D7B-A652FC4CF2A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A711D089-5550-4062-8D7B-A652FC4CF2A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A711D089-5550-4062-8D7B-A652FC4CF2A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

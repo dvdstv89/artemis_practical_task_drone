@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace drones.API.Data
 {
-    public class DataSeeders
+    public class DataSeeder
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {

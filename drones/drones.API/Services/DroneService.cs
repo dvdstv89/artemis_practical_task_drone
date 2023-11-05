@@ -27,7 +27,7 @@ namespace drones.API.Services
                 await GetDroneByIdAsync(drone.SerialNumber);
                 if (_response.IsOK)
                 {
-                    throw new ArgumentException(MessageText.DRONE_SERIAL_NUMBER_DUPLICATED);
+                    throw new ArgumentException(string.Format(MessageText.DRONE_SERIAL_NUMBER_DUPLICATED, drone.SerialNumber));
                 }
                 if (_response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {

@@ -37,6 +37,7 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<DroneApiDbContext>();
+    DataSeeder.Initialize(services);
 }
 
 
