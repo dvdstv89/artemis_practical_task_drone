@@ -13,38 +13,39 @@ The project uses an in-memory database, so no additional configuration is requir
 
 ### The database has the following entities:
 
-  Drone
-  {
-    SerialNumber(PK) : string (cadena de hasta 100 caracteres)
-    Model : Enum (Lightweight = 1, Middleweight = 2, Cruiserweight = 3, Heavyweight = 4)
-    WeightLimit : double (Range 1 : 500 gr)
-    BatteryCapacity : double (Range 0:100)
-    State : Enum (IDLE = 1, LOADING = 2, LOADED = 3, DELIVERING = 4, DELIVERED = 5, RETURNING = 6)
-  }
-
-  Medication
-  {
-    Code(PK) : string (allowed only letters, numbers, ‘-‘, ‘_’)
-    Name : (allowed only upper case letters, underscore and numbers)
-    Weight : double (Range 1 : 500 gr)	
-    Image : byte[]
-  }
-
-  Many-to-many relationship between Drones and Medicines count an attribute in the relationship to know the amount of a medicine loaded in the drone
-  DroneMedication 
-  {	
-    DroneSerialNumber : string
-    MedicationCode : string
-    Count: int
-  }
-
-  PeriodicTaskLog
-  {
-    Id : GUID
-    SerialNumber : string
-    BatteryCapacity : double
-    Date : DateTime
-  }		
+	  Drone
+	  {
+	    SerialNumber(PK) : string (cadena de hasta 100 caracteres)
+	    Model : Enum (Lightweight = 1, Middleweight = 2, Cruiserweight = 3, Heavyweight = 4)
+	    WeightLimit : double (Range 1 : 500 gr)
+	    BatteryCapacity : double (Range 0:100)
+	    State : Enum (IDLE = 1, LOADING = 2, LOADED = 3, DELIVERING = 4, DELIVERED = 5, RETURNING = 6)
+	  }
+	
+	  Medication
+	  {
+	    Code(PK) : string (allowed only letters, numbers, ‘-‘, ‘_’)
+	    Name : (allowed only upper case letters, underscore and numbers)
+	    Weight : double (Range 1 : 500 gr)	
+	    Image : byte[]
+	  }
+	
+	  Many-to-many relationship between Drones and Medicines count an attribute in the relationship to know the amount of a medicine loaded in the drone
+	
+	  DroneMedication 
+	  {	
+	    DroneSerialNumber : string
+	    MedicationCode : string
+	    Count: int
+	  }
+	
+	  PeriodicTaskLog
+	  {
+	    Id : GUID
+	    SerialNumber : string
+	    BatteryCapacity : double
+	    Date : DateTime
+	  }		
 
 ### Initial Data Set
 When you start the application, a sample data set is automatically loaded to ensure a functional environment for testing and demonstrations.
@@ -76,7 +77,7 @@ This data set includes:
     Medication { Code = "MED009", Name = "MedicationI", Weight = 57, Image = new byte[] { 255, 255, 255, 255 } }
     Medication { Code = "MED010", Name = "MedicationJ", Weight = 40, Image = new byte[] { 255, 255, 255, 255 } }
 		
-	DroneMedication
+   DroneMedication
 
     DroneMedication { DroneSerialNumber = "DRN002", MedicationCode = "MED001", Count = 1 }
     DroneMedication { DroneSerialNumber = "DRN002", MedicationCode = "MED002", Count = 1 }
@@ -94,99 +95,105 @@ This data set includes:
 
 The system includes a periodic task that records the battery status of all drones every 10 seconds and saves them in a table called PeriodicTaskLog.
 
-	Drone: DRN001     | BatteryCapacity: 80  | Date: 5/11/2023 11:33:51 PM
-  Drone: DRN002     | BatteryCapacity: 70  | Date: 5/11/2023 11:33:51 PM
-  Drone: DRN003     | BatteryCapacity: 18  | Date: 5/11/2023 11:33:51 PM
-  Drone: DRN004     | BatteryCapacity: 23  | Date: 5/11/2023 11:33:51 PM
-  Drone: DRN005     | BatteryCapacity: 40  | Date: 5/11/2023 11:33:51 PM
-  Drone: DRN006     | BatteryCapacity: 5   | Date: 5/11/2023 11:33:51 PM
-  Drone: DRN007     | BatteryCapacity: 75  | Date: 5/11/2023 11:33:51 PM
-  Drone: DRN008     | BatteryCapacity: 80  | Date: 5/11/2023 11:33:51 PM
-  Drone: DRN009     | BatteryCapacity: 98  | Date: 5/11/2023 11:33:51 PM
-  Drone: DRN010     | BatteryCapacity: 100 | Date: 5/11/2023 11:33:51 PM
-  Drone: DRONE123   | BatteryCapacity: 100 | Date: 5/11/2023 11:33:51 PM
+	  Drone: DRN001     | BatteryCapacity: 80  | Date: 5/11/2023 11:33:51 PM
+	  Drone: DRN002     | BatteryCapacity: 70  | Date: 5/11/2023 11:33:51 PM
+	  Drone: DRN003     | BatteryCapacity: 18  | Date: 5/11/2023 11:33:51 PM
+	  Drone: DRN004     | BatteryCapacity: 23  | Date: 5/11/2023 11:33:51 PM
+	  Drone: DRN005     | BatteryCapacity: 40  | Date: 5/11/2023 11:33:51 PM
+	  Drone: DRN006     | BatteryCapacity: 5   | Date: 5/11/2023 11:33:51 PM
+	  Drone: DRN007     | BatteryCapacity: 75  | Date: 5/11/2023 11:33:51 PM
+	  Drone: DRN008     | BatteryCapacity: 80  | Date: 5/11/2023 11:33:51 PM
+	  Drone: DRN009     | BatteryCapacity: 98  | Date: 5/11/2023 11:33:51 PM
+	  Drone: DRN010     | BatteryCapacity: 100 | Date: 5/11/2023 11:33:51 PM
+	  Drone: DRONE123   | BatteryCapacity: 100 | Date: 5/11/2023 11:33:51 PM
 
 # API usage
 
 The service provides endpoints to interact with the drones. Below are details:
 
-  POST /api/Drone Register a new drone.
-  POST /api/Drone/load-medications/{serialNumber}: Load medicines into a specific drone.
-  GET /api/Drone/chek-load-medications/{serialNumber}: Gets the medications loaded on a drone.
-  GET /api/Drone/chek-available-drone-for-loading: Gets the list of drones available for charging.
-  GET /api/Drone/chek-battery-capacity/{serialNumber}: Get the battery level of a specific drone.
-  POST /api/Drone/change-battery-level/{serialNumber}: Change the battery level of a specific drone.
-  POST /api/Drone/change-state/{serialNumber}: Change the state of a specific drone.
-  GET /api/Log/{serialNumber}: Get the battery status log of a specific drone recorded by the periodic task.
+	  POST /api/Drone Register a new drone.
+	  POST /api/Drone/load-medications/{serialNumber}: Load medicines into a specific drone.
+	  GET /api/Drone/chek-load-medications/{serialNumber}: Gets the medications loaded on a drone.
+	  GET /api/Drone/chek-available-drone-for-loading: Gets the list of drones available for charging.
+	  GET /api/Drone/chek-battery-capacity/{serialNumber}: Get the battery level of a specific drone.
+	  POST /api/Drone/change-battery-level/{serialNumber}: Change the battery level of a specific drone.
+	  POST /api/Drone/change-state/{serialNumber}: Change the state of a specific drone.
+	  GET /api/Log/{serialNumber}: Get the battery status log of a specific drone recorded by the periodic task.
 
 ## Application Example
-  {
-    "serialNumber": "DRONE123",
-    "model": 1,
-    "weightLimit": 500,
-    "batteryCapacity": 100,
-    "state": 1
-  }
+
+	  {
+	    "serialNumber": "DRONE123",
+	    "model": 1,
+	    "weightLimit": 500,
+	    "batteryCapacity": 100,
+	    "state": 1
+	  }
 
 ## Example of a Created Response
-  {
-    "statusCode": 201,
-    "isValid": true,
-    "errors": [],
-    "result": {
-      "serialNumber": "DRONE123",
-      "model": 1,
-      "weightLimit": 500,
-      "batteryCapacity": 100,
-      "state": 1
-    }
-  }
+
+	  {
+	    "statusCode": 201,
+	    "isValid": true,
+	    "errors": [],
+	    "result": {
+	      "serialNumber": "DRONE123",
+	      "model": 1,
+	      "weightLimit": 500,
+	      "batteryCapacity": 100,
+	      "state": 1
+	    }
+	  }
 
 ## Example of Bad Response
-  {
-    "statusCode": 400,
-    "isValid": false,
-    "errors": [
-      "Exist a drone registered with the same serial number DRONE123"
-    ],
-    "result": null
-  }
+
+	  {
+	    "statusCode": 400,
+	    "isValid": false,
+	    "errors": [
+	      "Exist a drone registered with the same serial number DRONE123"
+	    ],
+	    "result": null
+	  }
 
 ## Example of Not Found Response
-  {
-    "statusCode": 404,
-    "isValid": false,
-    "errors": [
-      "No drone found with the serial number 1"
-    ],
-    "result": null
-  }
+
+	  {
+	    "statusCode": 404,
+	    "isValid": false,
+	    "errors": [
+	      "No drone found with the serial number 1"
+	    ],
+	    "result": null
+	  }
 
 ## Example of Log Battery State Response
-  {
-    "statusCode": 200,
-    "isValid": true,
-    "errors": [],
-    "result": [
-      {
-        "serialNumber": "DRONE123",
-        "batteryCapacity": 100,
-        "date": "2023-11-05T23:28:01.5045138-05:00"
-      },
-      {
-        "serialNumber": "DRONE123",
-        "batteryCapacity": 100,
-        "date": "2023-11-05T23:28:11.5012361-05:00"
-      },
-      {
-        "serialNumber": "DRONE123",
-        "batteryCapacity": 100,
-        "date": "2023-11-05T23:28:21.4923649-05:00"
-      }
-    ]
-  }
+
+	  {
+	    "statusCode": 200,
+	    "isValid": true,
+	    "errors": [],
+	    "result": [
+	      {
+	        "serialNumber": "DRONE123",
+	        "batteryCapacity": 100,
+	        "date": "2023-11-05T23:28:01.5045138-05:00"
+	      },
+	      {
+	        "serialNumber": "DRONE123",
+	        "batteryCapacity": 100,
+	        "date": "2023-11-05T23:28:11.5012361-05:00"
+	      },
+	      {
+	        "serialNumber": "DRONE123",
+	        "batteryCapacity": 100,
+	        "date": "2023-11-05T23:28:21.4923649-05:00"
+	      }
+	    ]
+	  }
 
 # Testing execution
+
 	Make sure you have the following installed: .NET 7 SDK
 
 52 test cases have been prepared to ensure the functionality and stability of the service.
