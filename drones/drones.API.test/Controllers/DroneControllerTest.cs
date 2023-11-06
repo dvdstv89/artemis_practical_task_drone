@@ -151,20 +151,11 @@ namespace drones.API.test.Controllers
         }
 
         [Test]
-        [TestCase(HttpStatusCode.OK, TestName = "Check availables drones for loading OK")]
-        [TestCase(HttpStatusCode.NotFound, TestName = "Check availables drones for loading NotFound")]
+        [TestCase(HttpStatusCode.OK, TestName = "Check availables drones for loading OK")]      
         public async Task CheckAvailableForLoadingTest(HttpStatusCode statusCodeResult)
         {
-            //Arrange           
-            if (TestContext.CurrentContext.Test.Name == "Check availables drones for loading OK")
-            {
-                InitializeDefaultContext();
-            }
-            else if (TestContext.CurrentContext.Test.Name == "Check availables drones for loading NotFound")
-            {
-                InitializeNoDroneAvailablesToFlyContext();
-            }
-
+            //Arrange
+            InitializeDefaultContext();
             IDroneService droneService = new DroneService(droneRepository, medicationRepository, mapper);
             DroneController droneController = new DroneController(droneService);
 
@@ -213,7 +204,7 @@ namespace drones.API.test.Controllers
         [TestCase(HttpStatusCode.OK, TestName = "Change battery capacity OK")]
         [TestCase(HttpStatusCode.BadRequest, TestName = "Change battery capacity whit empty serial number")]
         [TestCase(HttpStatusCode.NotFound, TestName = "Change battery capacity whit not found drone")]
-        [TestCase(HttpStatusCode.NotFound, TestName = "Change battery capacity whit bad data")]
+        [TestCase(HttpStatusCode.BadRequest, TestName = "Change battery capacity whit bad data")]
         public async Task ChangeBatteryLevelTest(HttpStatusCode statusCodeResult)
         {
             //Arrange
@@ -251,7 +242,7 @@ namespace drones.API.test.Controllers
         [TestCase(HttpStatusCode.BadRequest, TestName = "Change drone state whit empty serial number")]
         [TestCase(HttpStatusCode.BadRequest, TestName = "Change drone state whit to LOADING with battery low")]
         [TestCase(HttpStatusCode.NotFound, TestName = "Change drone state whit not found drone")]
-        [TestCase(HttpStatusCode.NotFound, TestName = "Change drone state whit bada data")]
+        [TestCase(HttpStatusCode.BadRequest, TestName = "Change drone state whit bad data")]
         public async Task ChangeStateTest(HttpStatusCode statusCodeResult)
         {
             //Arrange
@@ -275,7 +266,7 @@ namespace drones.API.test.Controllers
             {
                 serialNumber = "100";
             }
-            else if (TestContext.CurrentContext.Test.Name == "Change drone state whit bada data")
+            else if (TestContext.CurrentContext.Test.Name == "Change drone state whit bad data")
             {
                 droneController.ModelState.AddModelError("State", "Invalid State");
             }

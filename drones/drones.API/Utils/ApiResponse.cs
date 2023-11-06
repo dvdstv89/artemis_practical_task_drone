@@ -34,6 +34,7 @@ namespace drones.API.Utils
             StatusCode = HttpStatusCode.BadRequest;
             IsValid = false;
             Errors.Add(exception);
+            Result = null;
         }
 
         public void AddNotFoundResponse404(string mensaje)
@@ -41,6 +42,7 @@ namespace drones.API.Utils
             StatusCode = HttpStatusCode.NotFound;
             IsValid = false;
             Errors.Add(mensaje);
+            Result = null;
         }
     }
 }

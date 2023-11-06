@@ -11,8 +11,8 @@
         public const string DRONE_NOT_FOUND_AVAILABLES_FOR_LOADING = "No drone found availablea for loading";
         public const string DRONE_SERIAL_NUMBER_DUPLICATED = "Exist a drone registered with the same serial number {0}";
         public const string DRONE_SERIAL_NUMBER_EMPTY = "The serial number of the drone cannot be empty";
-        public const string DRONE_STATE_NO_READY_TO_FLY_BATTERY_LOW = "The drone SN:{0} is not ready to fly because the battery status is low {1}%";
-        public const string DRONE_STATE_NO_READY_TO_FLY_BUSY = "The drone SN:{0} is not ready to fly because is busy. Status {1}";
+        public const string DRONE_STATE_NO_READY_TO_FLY_BATTERY_LOW = "The drone SN:{0} is not available because the battery status is low {1}%";
+        public const string DRONE_STATE_NO_READY_TO_FLY_BUSY = "The drone SN:{0} is not ready to available because is busy. Status {1}";
 
         public const string MEDICATION_CODE_FORMAT_VALIDATION = "Code must only contain upper case letters, numbers, or '_'.";
         public const string MEDICATION_NAME_FORMAT_VALIDATION = "Name must only contain letters, numbers, '_', or '-'.";
