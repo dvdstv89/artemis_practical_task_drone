@@ -16,7 +16,7 @@ namespace drones.API.Models
         public string Name { get; set; }
 
         [Required]
-        [Range(0.1, 200, ErrorMessage = MessageText.MEDICATION_WEIGHT_MIN_VALUE_VALIDATION)]
+        [Range(1, 500, ErrorMessage = MessageText.MEDICATION_WEIGHT_MIN_VALUE_VALIDATION)]
         public double Weight { get; set; }
 
         public byte[] Image { get; set; }

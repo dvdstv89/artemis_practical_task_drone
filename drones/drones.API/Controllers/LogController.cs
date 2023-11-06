@@ -15,7 +15,7 @@ namespace drones.API.Controllers
             _periodicTaskLogService = periodicTaskLogService;
         }
 
-        [HttpPost("{serialNumber}")]
+        [HttpGet("{serialNumber}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

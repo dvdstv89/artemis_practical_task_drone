@@ -45,7 +45,7 @@ namespace drones.API.Controllers
             return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_LOAD_MEDICATION);
         }
 
-        [HttpPost("chek-load-medications/{serialNumber}")]
+        [HttpGet("chek-load-medications/{serialNumber}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -56,7 +56,7 @@ namespace drones.API.Controllers
             return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_LOAD_MEDICATION);
         }
 
-        [HttpPost("chek-available-drone-for-loading")]
+        [HttpGet("chek-available-drone-for-loading")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation(Summary = MessageText.ENDPOINT_NAME_CKECK_AVAILABLES_DRONES)]
@@ -66,7 +66,7 @@ namespace drones.API.Controllers
             return await HandleApiResponse(response, MessageText.ENDPOINT_NAME_CKECK_AVAILABLES_DRONES);
         }
 
-        [HttpPost("chek-battery-capacity/{serialNumber}")]
+        [HttpGet("chek-battery-capacity/{serialNumber}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
