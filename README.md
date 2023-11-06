@@ -52,7 +52,7 @@ This data set includes:
 	
   Drones
 	
-		Drone { SerialNumber = "DRN001", Model = DroneModel.Lightweight, WeightLimit = 100, BatteryCapacity = 80, State = DroneState.IDLE }
+    Drone { SerialNumber = "DRN001", Model = DroneModel.Lightweight, WeightLimit = 100, BatteryCapacity = 80, State = DroneState.IDLE }
     Drone { SerialNumber = "DRN002", Model = DroneModel.Lightweight, WeightLimit = 175, BatteryCapacity = 70, State = DroneState.LOADED }
     Drone { SerialNumber = "DRN003", Model = DroneModel.Middleweight, WeightLimit = 250, BatteryCapacity = 18, State = DroneState.RETURNING }
     Drone { SerialNumber = "DRN004", Model = DroneModel.Middleweight, WeightLimit = 300, BatteryCapacity = 23, State = DroneState.RETURNING }
@@ -64,6 +64,7 @@ This data set includes:
     Drone { SerialNumber = "DRN010", Model = DroneModel.Heavyweight, WeightLimit = 500, BatteryCapacity = 100, State = DroneState.IDLE }
 		
   Medication
+
     Medication { Code = "MED001", Name = "MedicationA", Weight = 80, Image = new byte[] { 255, 255, 255, 255 } }
     Medication { Code = "MED002", Name = "MedicationB", Weight = 60, Image = new byte[] { 255, 255, 255, 255 } }
     Medication { Code = "MED003", Name = "MedicationC", Weight = 45, Image = new byte[] { 255, 255, 255, 255 } }
@@ -76,6 +77,7 @@ This data set includes:
     Medication { Code = "MED010", Name = "MedicationJ", Weight = 40, Image = new byte[] { 255, 255, 255, 255 } }
 		
 	DroneMedication
+
     DroneMedication { DroneSerialNumber = "DRN002", MedicationCode = "MED001", Count = 1 }
     DroneMedication { DroneSerialNumber = "DRN002", MedicationCode = "MED002", Count = 1 }
 	
@@ -89,7 +91,9 @@ This data set includes:
 	dotnet run
 
 # Periodic Battery Log Task
+
 The system includes a periodic task that records the battery status of all drones every 10 seconds and saves them in a table called PeriodicTaskLog.
+
 	Drone: DRN001     | BatteryCapacity: 80  | Date: 5/11/2023 11:33:51 PM
   Drone: DRN002     | BatteryCapacity: 70  | Date: 5/11/2023 11:33:51 PM
   Drone: DRN003     | BatteryCapacity: 18  | Date: 5/11/2023 11:33:51 PM
@@ -103,6 +107,7 @@ The system includes a periodic task that records the battery status of all drone
   Drone: DRONE123   | BatteryCapacity: 100 | Date: 5/11/2023 11:33:51 PM
 
 # API usage
+
 The service provides endpoints to interact with the drones. Below are details:
 
   POST /api/Drone Register a new drone.
